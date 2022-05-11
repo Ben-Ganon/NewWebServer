@@ -22,7 +22,19 @@ namespace WebAppServer1.Controllers
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Review.ToListAsync());
+            return View(await _context.Review.ToListAsync());
+        }
+        public async Task<IActionResult> Search()
+        {
+            return View(await _context.Review.ToListAsync());
+        }
+
+
+        public async Task<IActionResult> Search2(string query)
+        {
+            var q = _context.Review.Where(rev => rev.Title.Contains(query) || rev.Description.Contains(query)
+            || rev.Name.Contains(query));
+            return Json(await q.ToListAsync());
         }
 
         // GET: Reviews/Details/5
