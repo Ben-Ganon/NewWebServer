@@ -2,6 +2,7 @@
 using ServerFreak.Models;
 using WebAppServer1.Data;
 using System.Net;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,15 +26,6 @@ namespace WebAppServer1.Controllers
             return _context.Contact.ToList();
         }
 
-        [Route("api/contacts")]
-        [HttpPost]
-        public async Task<IActionResult> setContacts(Contact a)
-        {
-            if (a == null)
-                return BadRequest();
-            var ans = await _context.AddAsync(a);
-            return Ok();
-        }
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
@@ -50,10 +42,11 @@ namespace WebAppServer1.Controllers
 
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] Contact a)
+        public void Post([FromBody] Stream a)
         {
-            var x = 32;
-            var ans = _context.Contact.Add(a);
+            Contact b = (Contact)JsonSerializer.Deserialize(a, default);
+            var ans = _context.Contact.Add(b);
+            var ans2 = _context.SaveChanges();
         }
 
         // PUT api/<ValuesController>/5
