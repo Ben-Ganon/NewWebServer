@@ -12,8 +12,8 @@
         avg += item.Stars;
         count++;
     }
-
-    avg /= count;
+    if(count != 0)
+        avg /= count;
 
 }
 <h1>Reviews</h1>
@@ -42,7 +42,7 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTime)
+                @Html.DisplayNameFor(model => model.Time)
             </th>
             <th></th>
         </tr>
@@ -64,7 +64,7 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateTime)
+                    @Html.DisplayFor(modelItem => item.Time)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

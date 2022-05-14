@@ -12,8 +12,8 @@ using WebAppServer1.Data;
 namespace WebAppServer1.Migrations
 {
     [DbContext(typeof(WebAppServer1Context))]
-    [Migration("20220511140945_Init")]
-    partial class Init
+    [Migration("20220514124047_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,9 +107,6 @@ namespace WebAppServer1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -118,6 +115,9 @@ namespace WebAppServer1.Migrations
 
                     b.Property<int>("Stars")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
