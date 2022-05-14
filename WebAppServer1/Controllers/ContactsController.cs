@@ -9,16 +9,20 @@ using ServerFreak.Models;
 using WebAppServer1.Data;
 
 namespace WebAppServer1.Controllers
-{
+{   
+     
     public class ContactsController : Controller
     {
         private readonly WebAppServer1Context _context;
+
 
         public ContactsController(WebAppServer1Context context)
         {
             _context = context;
         }
 
+
+        
         // GET: Contacts
         public async Task<IActionResult> Index()
         {

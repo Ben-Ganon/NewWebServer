@@ -19,6 +19,8 @@ namespace WebAppServer1.Controllers
             _context = context;
         }
 
+        
+
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
@@ -70,7 +72,7 @@ namespace WebAppServer1.Controllers
         {
             if (ModelState.IsValid)
             {
-                review.DateTime = DateTime.Now;
+                review.Time = DateTime.Now;
                 _context.Add(review);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -110,7 +112,7 @@ namespace WebAppServer1.Controllers
             {
                 try
                 {
-                    review.DateTime = DateTime.Now;
+                    review.Time = DateTime.Now;
                     _context.Update(review);
                     await _context.SaveChangesAsync();
                 }

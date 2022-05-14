@@ -16,6 +16,6 @@ namespace ServerFreak.Models
         public int Stars { get; set; }
 
         public string Name { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime Time { get; set; }
     }
 }
