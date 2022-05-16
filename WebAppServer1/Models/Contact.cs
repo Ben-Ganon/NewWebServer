@@ -10,7 +10,6 @@ namespace ServerFreak.Models
         [Required]
         public string Password { get; set; }
 
-
         public string NickName { get; set; }
 
         public string Server { get; set; }
