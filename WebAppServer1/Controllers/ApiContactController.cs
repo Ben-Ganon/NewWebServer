@@ -42,11 +42,11 @@ namespace WebAppServer1.Controllers
 
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] Stream a)
+        public void Post([Bind("Title, Body")] Contact a)
         {
-            Contact b = (Contact)JsonSerializer.Deserialize(a, default);
-            var ans = _context.Contact.Add(b);
-            var ans2 = _context.SaveChanges();
+            a.DateTime = DateTime.Now;
+            _context.Contact.Add(a);
+            _context.SaveChanges();
         }
 
         // PUT api/<ValuesController>/5
