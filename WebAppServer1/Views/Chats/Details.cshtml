@@ -1,4 +1,4 @@
-﻿@model ServerFreak.Models.ChatBox
+﻿@model ServerFreak.Models.Chat
 
 @{
     ViewData["Title"] = "Details";
@@ -7,12 +7,12 @@
 <h1>Details</h1>
 
 <div>
-    <h4>ChatBox</h4>
+    <h4>Chat</h4>
     <hr />
     <dl class="row">
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.Contact">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

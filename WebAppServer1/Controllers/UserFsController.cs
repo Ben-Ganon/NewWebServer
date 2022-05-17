@@ -10,85 +10,88 @@ using WebAppServer1.Data;
 
 namespace WebAppServer1.Controllers
 {
-    public class ChatBoxesController : Controller
+    public class UserFsController : Controller
     {
         private readonly WebAppServer1Context _context;
 
-        public ChatBoxesController(WebAppServer1Context context)
+        public UserFsController(WebAppServer1Context context)
         {
             _context = context;
         }
 
-        // GET: ChatBoxes
+        // GET: UserFs
         public async Task<IActionResult> Index()
         {
-              return View(await _context.ChatBox.ToListAsync());
+              return View(await _context.User.ToListAsync());
         }
 
-        // GET: ChatBoxes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: UserFs/Details/5
+        public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.ChatBox == null)
+            if (id == null || _context.User == null)
             {
                 return NotFound();
             }
 
-            var chatBox = await _context.ChatBox
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (chatBox == null)
+            var userF = await _context.User
+                .FirstOrDefaultAsync(m => m.Username == id);
+            if (userF == null)
             {
                 return NotFound();
             }
 
-            return View(chatBox);
+            return View(userF);
         }
 
-        // GET: ChatBoxes/Create
-        public IActionResult Create()
+        // GET: UserFs/Create
+        public async Task<IActionResult> Create()
         {
+            var chats = await _context.User.ToListAsync();
+
+            ViewBag.Chats = new MultiSelectList(chats, nameof(Chat.Contact), nameof(Chat.Contact));
             return View();
         }
 
-        // POST: ChatBoxes/Create
+        // POST: UserFs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] ChatBox chatBox)
+        public async Task<IActionResult> Create([Bind("Username,Password,NickName,Image,Server")] UserF userF)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(chatBox);
+                _context.Add(userF);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(chatBox);
+            return View(userF);
         }
 
-        // GET: ChatBoxes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: UserFs/Edit/5
+        public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.ChatBox == null)
+            if (id == null || _context.User == null)
             {
                 return NotFound();
             }
 
-            var chatBox = await _context.ChatBox.FindAsync(id);
-            if (chatBox == null)
+            var userF = await _context.User.FindAsync(id);
+            if (userF == null)
             {
                 return NotFound();
             }
-            return View(chatBox);
+            return View(userF);
         }
 
-        // POST: ChatBoxes/Edit/5
+        // POST: UserFs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id")] ChatBox chatBox)
+        public async Task<IActionResult> Edit(string id, [Bind("Username,Password,NickName,Image,Server")] UserF userF)
         {
-            if (id != chatBox.Id)
+            if (id != userF.Username)
             {
                 return NotFound();
             }
@@ -97,12 +100,12 @@ namespace WebAppServer1.Controllers
             {
                 try
                 {
-                    _context.Update(chatBox);
+                    _context.Update(userF);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChatBoxExists(chatBox.Id))
+                    if (!UserFExists(userF.Username))
                     {
                         return NotFound();
                     }
@@ -113,49 +116,49 @@ namespace WebAppServer1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(chatBox);
+            return View(userF);
         }
 
-        // GET: ChatBoxes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: UserFs/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.ChatBox == null)
+            if (id == null || _context.User == null)
             {
                 return NotFound();
             }
 
-            var chatBox = await _context.ChatBox
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (chatBox == null)
+            var userF = await _context.User
+                .FirstOrDefaultAsync(m => m.Username == id);
+            if (userF == null)
             {
                 return NotFound();
             }
 
-            return View(chatBox);
+            return View(userF);
         }
 
-        // POST: ChatBoxes/Delete/5
+        // POST: UserFs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.ChatBox == null)
+            if (_context.User == null)
             {
-                return Problem("Entity set 'WebAppServer1Context.ChatBox'  is null.");
+                return Problem("Entity set 'WebAppServer1Context.User'  is null.");
             }
-            var chatBox = await _context.ChatBox.FindAsync(id);
-            if (chatBox != null)
+            var userF = await _context.User.FindAsync(id);
+            if (userF != null)
             {
-                _context.ChatBox.Remove(chatBox);
+                _context.User.Remove(userF);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ChatBoxExists(int id)
+        private bool UserFExists(string id)
         {
-          return _context.ChatBox.Any(e => e.Id == id);
+          return _context.User.Any(e => e.Username == id);
         }
     }
 }

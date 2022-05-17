@@ -6,11 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WebAppServer1Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("WebAppServer1Context") ?? throw new InvalidOperationException("Connection string 'WebAppServer1Context' not found.")));
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(1);
+});
 
 
 var app = builder.Build();
@@ -35,5 +40,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Reviews}/{action=Index}/{id?}");
+
+app.UseSession();
 
 app.Run();

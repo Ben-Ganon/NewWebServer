@@ -14,12 +14,12 @@ namespace WebAppServer1.Data
         {
         }
 
+        public DbSet<ServerFreak.Models.Chat>? Chat { get; set; }
+
+        public DbSet<ServerFreak.Models.UserF>? User { get; set; }
+
+        public DbSet<ServerFreak.Models.Message>? Message { get; set; }
+
         public DbSet<ServerFreak.Models.Review>? Review { get; set; }
-
-        public DbSet<ServerFreak.Models.MessageChat> MessageChat { get; set; }
-
-        public DbSet<ServerFreak.Models.ChatBox> ChatBox { get; set; }
-
-        public DbSet<ServerFreak.Models.Contact> Contact { get; set; }
     }
 }

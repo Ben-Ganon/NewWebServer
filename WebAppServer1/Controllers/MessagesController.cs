@@ -10,86 +10,86 @@ using WebAppServer1.Data;
 
 namespace WebAppServer1.Controllers
 {
-    public class MessageChatsController : Controller
+    public class MessagesController : Controller
     {
         private readonly WebAppServer1Context _context;
 
-        public MessageChatsController(WebAppServer1Context context)
+        public MessagesController(WebAppServer1Context context)
         {
             _context = context;
         }
 
-        // GET: MessageChats
+        // GET: Messages
         public async Task<IActionResult> Index()
         {
-              return View(await _context.MessageChat.ToListAsync());
+              return View(await _context.Message.ToListAsync());
         }
 
-        // GET: MessageChats/Details/5
+        // GET: Messages/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.MessageChat == null)
+            if (id == null || _context.Message == null)
             {
                 return NotFound();
             }
 
-            var messageChat = await _context.MessageChat
+            var message = await _context.Message
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (messageChat == null)
+            if (message == null)
             {
                 return NotFound();
             }
 
-            return View(messageChat);
+            return View(message);
         }
 
-        // GET: MessageChats/Create
+        // GET: Messages/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: MessageChats/Create
+        // POST: Messages/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,Sent")] MessageChat messageChat)
+        public async Task<IActionResult> Create([Bind("Id,Content,Type,Sent")] Message message)
         {
             if (ModelState.IsValid)
-            {
-                messageChat.Created = DateTime.Now;
-                _context.Add(messageChat);
+            {   
+                message.Created = DateTime.Now;
+                _context.Add(message);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(messageChat);
+            return View(message);
         }
 
-        // GET: MessageChats/Edit/5
+        // GET: Messages/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.MessageChat == null)
+            if (id == null || _context.Message == null)
             {
                 return NotFound();
             }
 
-            var messageChat = await _context.MessageChat.FindAsync(id);
-            if (messageChat == null)
+            var message = await _context.Message.FindAsync(id);
+            if (message == null)
             {
                 return NotFound();
             }
-            return View(messageChat);
+            return View(message);
         }
 
-        // POST: MessageChats/Edit/5
+        // POST: Messages/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,Sent")] MessageChat messageChat)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,Type,Created,Sent")] Message message)
         {
-            if (id != messageChat.Id)
+            if (id != message.Id)
             {
                 return NotFound();
             }
@@ -98,13 +98,12 @@ namespace WebAppServer1.Controllers
             {
                 try
                 {
-                    messageChat.Created = DateTime.Now;
-                    _context.Update(messageChat);
+                    _context.Update(message);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MessageChatExists(messageChat.Id))
+                    if (!MessageExists(message.Id))
                     {
                         return NotFound();
                     }
@@ -115,50 +114,49 @@ namespace WebAppServer1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(messageChat);
+            return View(message);
         }
 
-
-        // GET: MessageChats/Delete/5
+        // GET: Messages/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.MessageChat == null)
+            if (id == null || _context.Message == null)
             {
                 return NotFound();
             }
 
-            var messageChat = await _context.MessageChat
+            var message = await _context.Message
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (messageChat == null)
+            if (message == null)
             {
                 return NotFound();
             }
 
-            return View(messageChat);
+            return View(message);
         }
 
-        // POST: MessageChats/Delete/5
+        // POST: Messages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.MessageChat == null)
+            if (_context.Message == null)
             {
-                return Problem("Entity set 'WebAppServer1Context.MessageChat'  is null.");
+                return Problem("Entity set 'WebAppServer1Context.Message'  is null.");
             }
-            var messageChat = await _context.MessageChat.FindAsync(id);
-            if (messageChat != null)
+            var message = await _context.Message.FindAsync(id);
+            if (message != null)
             {
-                _context.MessageChat.Remove(messageChat);
+                _context.Message.Remove(message);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MessageChatExists(int id)
+        private bool MessageExists(int id)
         {
-          return _context.MessageChat.Any(e => e.Id == id);
+          return _context.Message.Any(e => e.Id == id);
         }
     }
 }

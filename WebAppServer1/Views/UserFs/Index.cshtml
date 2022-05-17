@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ServerFreak.Models.Contact>
+﻿@model IEnumerable<ServerFreak.Models.UserF>
 
 @{
     ViewData["Title"] = "Index";
@@ -19,10 +19,10 @@
                 @Html.DisplayNameFor(model => model.NickName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Server)
+                @Html.DisplayNameFor(model => model.Image)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTime)
+                @Html.DisplayNameFor(model => model.Server)
             </th>
             <th></th>
         </tr>
@@ -37,15 +37,15 @@
                 @Html.DisplayFor(modelItem => item.NickName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Image)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Server)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Username">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Username">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Username">Delete</a>
             </td>
         </tr>
 }
