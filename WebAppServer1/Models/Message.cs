@@ -2,21 +2,22 @@
 
 namespace ServerFreak.Models
 {
-    public class MessageChat
+    public class Message
     {
-        [Required]
+        [Key]
         public int Id { get; set; }
-        
+
         [Required]
         public string Content { get; set; }
+
+        public string Type { get; set; }
 
         public DateTime Created { get; set; }
 
         [Required]
         public bool Sent { get; set; }
 
-        [Required]
-        public Contact ClientSent { get; set; }
+        
 
     }
 }

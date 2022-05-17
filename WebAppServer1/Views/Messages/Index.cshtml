@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ServerFreak.Models.MessageChat>
+﻿@model IEnumerable<ServerFreak.Models.Message>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,6 +16,9 @@
                 @Html.DisplayNameFor(model => model.Content)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Created)
             </th>
             <th>
@@ -29,6 +32,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Created)

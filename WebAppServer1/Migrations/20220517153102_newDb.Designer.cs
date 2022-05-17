@@ -12,8 +12,8 @@ using WebAppServer1.Data;
 namespace WebAppServer1.Migrations
 {
     [DbContext(typeof(WebAppServer1Context))]
-    [Migration("20220514124047_test")]
-    partial class test
+    [Migration("20220517153102_newDb")]
+    partial class newDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,22 @@ namespace WebAppServer1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ServerFreak.Models.ChatBox", b =>
+            modelBuilder.Entity("ServerFreak.Models.Chat", b =>
+                {
+                    b.Property<string>("Contact")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserFUsername")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Contact");
+
+                    b.HasIndex("UserFUsername");
+
+                    b.ToTable("Chat");
+                });
+
+            modelBuilder.Entity("ServerFreak.Models.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,52 +47,7 @@ namespace WebAppServer1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ContactId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactId");
-
-                    b.ToTable("ChatBox");
-                });
-
-            modelBuilder.Entity("ServerFreak.Models.Contact", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NickName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Server")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contact");
-                });
-
-            modelBuilder.Entity("ServerFreak.Models.MessageChat", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("ChatBoxId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClientSentId")
-                        .IsRequired()
+                    b.Property<string>("ChatContact")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -90,13 +60,14 @@ namespace WebAppServer1.Migrations
                     b.Property<bool>("Sent")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatBoxId");
+                    b.HasIndex("ChatContact");
 
-                    b.HasIndex("ClientSentId");
-
-                    b.ToTable("MessageChat");
+                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("ServerFreak.Models.Review", b =>
@@ -128,34 +99,49 @@ namespace WebAppServer1.Migrations
                     b.ToTable("Review");
                 });
 
-            modelBuilder.Entity("ServerFreak.Models.ChatBox", b =>
+            modelBuilder.Entity("ServerFreak.Models.UserF", b =>
                 {
-                    b.HasOne("ServerFreak.Models.Contact", null)
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NickName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Server")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Username");
+
+                    b.ToTable("User");
+                });
+
+            modelBuilder.Entity("ServerFreak.Models.Chat", b =>
+                {
+                    b.HasOne("ServerFreak.Models.UserF", null)
                         .WithMany("Chats")
-                        .HasForeignKey("ContactId");
+                        .HasForeignKey("UserFUsername");
                 });
 
-            modelBuilder.Entity("ServerFreak.Models.MessageChat", b =>
+            modelBuilder.Entity("ServerFreak.Models.Message", b =>
                 {
-                    b.HasOne("ServerFreak.Models.ChatBox", null)
+                    b.HasOne("ServerFreak.Models.Chat", null)
                         .WithMany("Messages")
-                        .HasForeignKey("ChatBoxId");
-
-                    b.HasOne("ServerFreak.Models.Contact", "ClientSent")
-                        .WithMany()
-                        .HasForeignKey("ClientSentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClientSent");
+                        .HasForeignKey("ChatContact");
                 });
 
-            modelBuilder.Entity("ServerFreak.Models.ChatBox", b =>
+            modelBuilder.Entity("ServerFreak.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("ServerFreak.Models.Contact", b =>
+            modelBuilder.Entity("ServerFreak.Models.UserF", b =>
                 {
                     b.Navigation("Chats");
                 });

@@ -9,91 +9,91 @@ using ServerFreak.Models;
 using WebAppServer1.Data;
 
 namespace WebAppServer1.Controllers
-{   
-     
-    public class ContactsController : Controller
+{
+    public class ChatsController : Controller
     {
         private readonly WebAppServer1Context _context;
 
-
-        public ContactsController(WebAppServer1Context context)
+        public ChatsController(WebAppServer1Context context)
         {
             _context = context;
         }
 
-
-        
-        // GET: Contacts
+        // GET: Chats
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Contact.ToListAsync());
+              return View(await _context.Chat.ToListAsync());
         }
 
-        // GET: Contacts/Details/5
+        // GET: Chats/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Contact == null)
+            if (id == null || _context.Chat == null)
             {
                 return NotFound();
             }
 
-            var contact = await _context.Contact
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contact == null)
+            var chat = await _context.Chat
+                .FirstOrDefaultAsync(m => m.Contact == id);
+            if (chat == null)
             {
                 return NotFound();
             }
 
-            return View(contact);
+            return View(chat);
         }
 
-        // GET: Contacts/Create
-        public IActionResult Create()
+        // GET: Chats/Create
+        public async Task<IActionResult> Create()
         {
+            var messages = await _context.Message.ToListAsync();
+
+            ViewBag.Messages = new MultiSelectList(messages, nameof(Message.Id),nameof(Message.Content));
             return View();
         }
 
-        // POST: Contacts/Create
+        // POST: Chats/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Password,NickName,Server")] Contact contact)
+        public async Task<IActionResult> Create([Bind("Contact")] Chat chat, int[] messages)
         {
+
             if (ModelState.IsValid)
             {
-                contact.DateTime = DateTime.Now;
-                _context.Add(contact);
+                chat.Messages = await _context.Message.Where(x => messages.Contains(x.Id)).ToListAsync();
+                _context.Add(chat);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(contact);
+            return View(chat);
         }
 
-        // GET: Contacts/Edit/5
+        // GET: Chats/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Contact == null)
+            if (id == null || _context.Chat == null)
             {
                 return NotFound();
             }
 
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact == null)
+            var chat = await _context.Chat.FindAsync(id);
+            if (chat == null)
             {
                 return NotFound();
             }
-            return View(contact);
+            return View(chat);
         }
 
-        // POST: Contacts/Edit/5
+        // POST: Chats/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Password,NickName,Server")] Contact contact)
+        public async Task<IActionResult> Edit(string id, [Bind("Chat")] Chat chat)
         {
-            if (id != contact.Id)
+            if (id != chat.Contact)
             {
                 return NotFound();
             }
@@ -102,13 +102,12 @@ namespace WebAppServer1.Controllers
             {
                 try
                 {
-                    contact.DateTime = DateTime.Now;
-                    _context.Update(contact);
+                    _context.Update(chat);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ContactExists(contact.Id))
+                    if (!ChatExists(chat.Contact))
                     {
                         return NotFound();
                     }
@@ -119,49 +118,49 @@ namespace WebAppServer1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(contact);
+            return View(chat);
         }
 
-        // GET: Contacts/Delete/5
+        // GET: Chats/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Contact == null)
+            if (id == null || _context.Chat == null)
             {
                 return NotFound();
             }
 
-            var contact = await _context.Contact
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contact == null)
+            var chat = await _context.Chat
+                .FirstOrDefaultAsync(m => m.Contact == id);
+            if (chat == null)
             {
                 return NotFound();
             }
 
-            return View(contact);
+            return View(chat);
         }
 
-        // POST: Contacts/Delete/5
+        // POST: Chats/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Contact == null)
+            if (_context.Chat == null)
             {
-                return Problem("Entity set 'WebAppServer1Context.Contact'  is null.");
+                return Problem("Entity set 'WebAppServer1Context.Chat'  is null.");
             }
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact != null)
+            var chat = await _context.Chat.FindAsync(id);
+            if (chat != null)
             {
-                _context.Contact.Remove(contact);
+                _context.Chat.Remove(chat);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ContactExists(string id)
+        private bool ChatExists(string id)
         {
-          return _context.Contact.Any(e => e.Id == id);
+          return _context.Chat.Any(e => e.Contact == id);
         }
     }
 }
