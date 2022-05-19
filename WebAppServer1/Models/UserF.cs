@@ -16,10 +16,16 @@ namespace ServerFreak.Models
         public string Image { get; set; }
 
         public string Server { get; set; } 
-        public ICollection<Chat>? Chats { get; set; }
+        public List<Chat>? Chats { get; set; }
 
-        public ICollection<Contact>? Contacts { get; set; }
-        public UserF(string username, string password, string nickName, string image, string server, ICollection<Chat> chats, ICollection<Contact> contacts)
+        public List<Contact>? Contacts { get; set; }
+        public UserF()
+        {
+            Chats = new List<Chat>();
+            Contacts = new List<Contact>(); 
+        }
+        
+        public UserF(string username, string password, string nickName, string image, string server, List<Chat> chats, List<Contact> contacts)
         {
             Username = username;
             Password = password;
@@ -28,6 +34,11 @@ namespace ServerFreak.Models
             Server = server;
             Chats = chats;
             Contacts = contacts;
+        }
+        public Contact Contact(string Id)
+        {
+            Contact c = this.Contacts.First(x => x.Id == Id);
+            return c;
         }
     }
     

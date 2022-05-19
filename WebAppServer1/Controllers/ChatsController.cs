@@ -54,7 +54,7 @@ namespace WebAppServer1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ContactId,UserId")] Chat chat)
+        public async Task<IActionResult> Create([Bind("Id,ContactId")] Chat chat)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace WebAppServer1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ContactId,UserId")] Chat chat)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ContactId")] Chat chat)
         {
             if (id != chat.Id)
             {

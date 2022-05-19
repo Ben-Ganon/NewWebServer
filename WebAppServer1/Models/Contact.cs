@@ -15,6 +15,10 @@ namespace WebAppServer1.Models
         public string server { get; set; }
 
         public DateTime LastDate { get; set; }
+        public Contact()
+        {
+
+        }
         public Contact(string id, string name, string last, string server, DateTime lastDate)
         {
             Id = id;
