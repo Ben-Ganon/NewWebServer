@@ -22,18 +22,18 @@ namespace WebAppServer1.Controllers
         // GET: UserFs
         public async Task<IActionResult> Index()
         {
-              return View(await _context.User.ToListAsync());
+              return View(await _context.UserF.ToListAsync());
         }
 
         // GET: UserFs/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.User == null)
+            if (id == null || _context.UserF == null)
             {
                 return NotFound();
             }
 
-            var userF = await _context.User
+            var userF = await _context.UserF
                 .FirstOrDefaultAsync(m => m.Username == id);
             if (userF == null)
             {
@@ -44,11 +44,8 @@ namespace WebAppServer1.Controllers
         }
 
         // GET: UserFs/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            var chats = await _context.User.ToListAsync();
-
-            ViewBag.Chats = new MultiSelectList(chats, nameof(Chat.Contact), nameof(Chat.Contact));
             return View();
         }
 
@@ -71,12 +68,12 @@ namespace WebAppServer1.Controllers
         // GET: UserFs/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.User == null)
+            if (id == null || _context.UserF == null)
             {
                 return NotFound();
             }
 
-            var userF = await _context.User.FindAsync(id);
+            var userF = await _context.UserF.FindAsync(id);
             if (userF == null)
             {
                 return NotFound();
@@ -122,12 +119,12 @@ namespace WebAppServer1.Controllers
         // GET: UserFs/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.User == null)
+            if (id == null || _context.UserF == null)
             {
                 return NotFound();
             }
 
-            var userF = await _context.User
+            var userF = await _context.UserF
                 .FirstOrDefaultAsync(m => m.Username == id);
             if (userF == null)
             {
@@ -142,14 +139,14 @@ namespace WebAppServer1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.User == null)
+            if (_context.UserF == null)
             {
-                return Problem("Entity set 'WebAppServer1Context.User'  is null.");
+                return Problem("Entity set 'WebAppServer1Context.UserF'  is null.");
             }
-            var userF = await _context.User.FindAsync(id);
+            var userF = await _context.UserF.FindAsync(id);
             if (userF != null)
             {
-                _context.User.Remove(userF);
+                _context.UserF.Remove(userF);
             }
             
             await _context.SaveChangesAsync();
@@ -158,7 +155,7 @@ namespace WebAppServer1.Controllers
 
         private bool UserFExists(string id)
         {
-          return _context.User.Any(e => e.Username == id);
+          return _context.UserF.Any(e => e.Username == id);
         }
     }
 }

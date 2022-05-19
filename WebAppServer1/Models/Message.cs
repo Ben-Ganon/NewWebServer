@@ -6,6 +6,7 @@ namespace ServerFreak.Models
     {
         [Key]
         public int Id { get; set; }
+         
 
         [Required]
         public string Content { get; set; }
@@ -17,7 +18,14 @@ namespace ServerFreak.Models
         [Required]
         public bool Sent { get; set; }
 
-        
-
+       
+        public Message(int id, string content, string type, DateTime created, bool sent)
+        {
+            Id = id;
+            Content = content;
+            Type = type;
+            Created = created;
+            Sent = sent;
+        }
     }
 }

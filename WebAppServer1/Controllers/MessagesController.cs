@@ -54,11 +54,10 @@ namespace WebAppServer1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,Type,Sent")] Message message)
+        public async Task<IActionResult> Create([Bind("Id,ChatId,Content,Type,Created,Sent")] Message message)
         {
             if (ModelState.IsValid)
-            {   
-                message.Created = DateTime.Now;
+            {
                 _context.Add(message);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -87,7 +86,7 @@ namespace WebAppServer1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,Type,Created,Sent")] Message message)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ChatId,Content,Type,Created,Sent")] Message message)
         {
             if (id != message.Id)
             {

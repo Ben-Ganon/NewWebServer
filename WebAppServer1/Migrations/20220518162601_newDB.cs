@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebAppServer1.Migrations
 {
-    public partial class newDb : Migration
+    public partial class newDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,7 @@ namespace WebAppServer1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "UserF",
                 columns: table => new
                 {
                     Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -38,23 +38,47 @@ namespace WebAppServer1.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Username);
+                    table.PrimaryKey("PK_UserF", x => x.Username);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Chat",
                 columns: table => new
                 {
-                    Contact = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    ContactId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserFUsername = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chat", x => x.Contact);
+                    table.PrimaryKey("PK_Chat", x => new { x.Id, x.ContactId });
                     table.ForeignKey(
-                        name: "FK_Chat_User_UserFUsername",
+                        name: "FK_Chat_UserF_UserFUsername",
                         column: x => x.UserFUsername,
-                        principalTable: "User",
+                        principalTable: "UserF",
+                        principalColumn: "Username");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contact",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Last = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    server = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserFUsername = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contact", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contact_UserF_UserFUsername",
+                        column: x => x.UserFUsername,
+                        principalTable: "UserF",
                         principalColumn: "Username");
                 });
 
@@ -64,20 +88,23 @@ namespace WebAppServer1.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatId = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Sent = table.Column<bool>(type: "bit", nullable: false),
-                    ChatContact = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ChatContactId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ChatId1 = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Message", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Message_Chat_ChatContact",
-                        column: x => x.ChatContact,
+                        name: "FK_Message_Chat_ChatId1_ChatContactId",
+                        columns: x => new { x.ChatId1, x.ChatContactId },
                         principalTable: "Chat",
-                        principalColumn: "Contact");
+                        principalColumns: new[] { "Id", "ContactId" },
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -86,13 +113,21 @@ namespace WebAppServer1.Migrations
                 column: "UserFUsername");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Message_ChatContact",
+                name: "IX_Contact_UserFUsername",
+                table: "Contact",
+                column: "UserFUsername");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_ChatId1_ChatContactId",
                 table: "Message",
-                column: "ChatContact");
+                columns: new[] { "ChatId1", "ChatContactId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Contact");
+
             migrationBuilder.DropTable(
                 name: "Message");
 
@@ -103,7 +138,7 @@ namespace WebAppServer1.Migrations
                 name: "Chat");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "UserF");
         }
     }
 }

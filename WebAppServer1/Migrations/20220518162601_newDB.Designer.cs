@@ -12,8 +12,8 @@ using WebAppServer1.Data;
 namespace WebAppServer1.Migrations
 {
     [DbContext(typeof(WebAppServer1Context))]
-    [Migration("20220517153102_newDb")]
-    partial class newDb
+    [Migration("20220518162601_newDB")]
+    partial class newDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,13 +26,19 @@ namespace WebAppServer1.Migrations
 
             modelBuilder.Entity("ServerFreak.Models.Chat", b =>
                 {
-                    b.Property<string>("Contact")
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserFUsername")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Contact");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id", "ContactId");
 
                     b.HasIndex("UserFUsername");
 
@@ -47,8 +53,15 @@ namespace WebAppServer1.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ChatContact")
+                    b.Property<string>("ChatContactId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChatId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -65,7 +78,7 @@ namespace WebAppServer1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatContact");
+                    b.HasIndex("ChatId1", "ChatContactId");
 
                     b.ToTable("Message");
                 });
@@ -119,7 +132,38 @@ namespace WebAppServer1.Migrations
 
                     b.HasKey("Username");
 
-                    b.ToTable("User");
+                    b.ToTable("UserF");
+                });
+
+            modelBuilder.Entity("WebAppServer1.Models.Contact", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Last")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserFUsername")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("server")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserFUsername");
+
+                    b.ToTable("Contact");
                 });
 
             modelBuilder.Entity("ServerFreak.Models.Chat", b =>
@@ -133,7 +177,16 @@ namespace WebAppServer1.Migrations
                 {
                     b.HasOne("ServerFreak.Models.Chat", null)
                         .WithMany("Messages")
-                        .HasForeignKey("ChatContact");
+                        .HasForeignKey("ChatId1", "ChatContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebAppServer1.Models.Contact", b =>
+                {
+                    b.HasOne("ServerFreak.Models.UserF", null)
+                        .WithMany("Contacts")
+                        .HasForeignKey("UserFUsername");
                 });
 
             modelBuilder.Entity("ServerFreak.Models.Chat", b =>
@@ -144,6 +197,8 @@ namespace WebAppServer1.Migrations
             modelBuilder.Entity("ServerFreak.Models.UserF", b =>
                 {
                     b.Navigation("Chats");
+
+                    b.Navigation("Contacts");
                 });
 #pragma warning restore 612, 618
         }
