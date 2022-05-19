@@ -1,5 +1,5 @@
-﻿using ServerFreak.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using WebAppServer1.Models;
 
 namespace ServerFreak.Models
 {
@@ -17,5 +17,18 @@ namespace ServerFreak.Models
 
         public string Server { get; set; } 
         public ICollection<Chat>? Chats { get; set; }
+
+        public ICollection<Contact>? Contacts { get; set; }
+        public UserF(string username, string password, string nickName, string image, string server, ICollection<Chat> chats, ICollection<Contact> contacts)
+        {
+            Username = username;
+            Password = password;
+            NickName = nickName;
+            Image = image;
+            Server = server;
+            Chats = chats;
+            Contacts = contacts;
+        }
     }
+    
 }

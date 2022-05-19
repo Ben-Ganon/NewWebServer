@@ -1,4 +1,4 @@
-﻿@model ServerFreak.Models.Message
+﻿@model WebAppServer1.Models.Contact
 
 @{
     ViewData["Title"] = "Details";
@@ -7,38 +7,38 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Message</h4>
+    <h4>Contact</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ChatId)
+            @Html.DisplayNameFor(model => model.UserId)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ChatId)
+            @Html.DisplayFor(model => model.UserId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
+            @Html.DisplayNameFor(model => model.Last)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
+            @Html.DisplayFor(model => model.Last)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
+            @Html.DisplayNameFor(model => model.server)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Created)
+            @Html.DisplayFor(model => model.server)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sent)
+            @Html.DisplayNameFor(model => model.LastDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sent)
+            @Html.DisplayFor(model => model.LastDate)
         </dd>
     </dl>
 </div>
