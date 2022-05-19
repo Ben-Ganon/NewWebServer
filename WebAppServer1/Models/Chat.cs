@@ -9,13 +9,23 @@ namespace ServerFreak.Models
         public int Id { get; set; }
         public string ContactId { get; set; }
 
-        public ICollection<Message> Messages { get; set; }
+        public List<Message> Messages { get; set; }
 
-        public Chat(int id, string contactId, ICollection<Message> messages)
+        public Chat()
+        {
+            Messages = new List<Message>();
+
+        }
+        public Chat(int id, string contactId, List<Message> messages)
         {
             Id = id;
             ContactId = contactId;
             Messages = messages;
+        }
+        public Message Message(int Id)
+        {
+            Message m = this.Messages.Find(x => x.Id == Id);
+            return m;
         }
     }
 

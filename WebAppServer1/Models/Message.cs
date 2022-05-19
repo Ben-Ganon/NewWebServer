@@ -18,7 +18,7 @@ namespace ServerFreak.Models
         [Required]
         public bool Sent { get; set; }
 
-       
+       public Message() {}
         public Message(int id, string content, string type, DateTime created, bool sent)
         {
             Id = id;

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using ServerFreak.Models;
 using System.Net;
-using WebAppServer1.Data;
 using WebAppServer1.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,29 +32,26 @@ namespace WebAppServer1.Controllers
     [ApiController]
     public class ApiContactsController : ControllerBase
     {
-        private readonly WebAppServer1Context db;
+        
         private readonly string nameOfUser;
 
-        public ApiContactsController(WebAppServer1Context context)
+        public ApiContactsController()
         {
-            db = context;
+            
             //string nameOfUser = HttpContext.Session.GetString("username");
             nameOfUser = "BenG";
 
         }
         // GET: api/contacts
         [HttpGet]
-        public List<ReturnCont> Get()
+        public IEnumerable<ReturnCont> Get()
         {
 
-            var c = db.Contact.Where(x => x.UserId == nameOfUser)
-                .Select(x => new ReturnCont(x))
-                .ToList();
-            if (c.Count == 0)
-            {
-                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            
+            UserF u = HardContext.Get(nameOfUser);
+            if(u == null)
                 return null;
-            }
+            var c = u.Contacts.Select(x => new ReturnCont(x));
             return c;
         }
 
@@ -63,11 +59,9 @@ namespace WebAppServer1.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var c = db.Contact.Find(id);
-            if (c == null)
-            {
+            var c = HardContext.Get(nameOfUser).Contacts.Find(x => x.Id == id);
+            if(c == null)
                 return NotFound();
-            }
             ReturnCont d = new ReturnCont(c);
             return Ok(d);
         }
@@ -77,9 +71,9 @@ namespace WebAppServer1.Controllers
         public void Post([FromBody] Contact c)
         {
             c.LastDate = DateTime.Now;
-            c.UserId = db.UserF.Find(nameOfUser).Username;
-            db.Contact.Add(c);
-            db.SaveChanges();
+            
+            HardContext.AddContact(nameOfUser, c);
+            HardContext.SaveChanges();
             base.Response.StatusCode = (int)HttpStatusCode.Created;
         }
 
@@ -87,16 +81,12 @@ namespace WebAppServer1.Controllers
         [HttpPut("{id}")]
         public void Put([Bind("Title, Body")] string id, string newName, string newServer)
         {
-            var c = db.Contact.Find(id);
+            var c = HardContext.PutContact(nameOfUser, id, newServer, newName);
             if (c == null)
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return;
             }
-            c.Name = newName;
-            c.server = newServer;
-            db.Update(c);
-            db.SaveChanges();
             base.Response.StatusCode = (int)HttpStatusCode.NoContent;
 
         }
@@ -105,7 +95,7 @@ namespace WebAppServer1.Controllers
         [HttpDelete("{id}")]
         public void Delete(string id)
         {
-            var chatId = db.Chat.Find(id).Id;
+            var r = HardContext.DeleteContact(nameOfUser, id);
 
 
         }
