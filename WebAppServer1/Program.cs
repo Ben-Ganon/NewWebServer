@@ -24,7 +24,17 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(1);
 });
 
+builder.Services.AddCors(options =>
+{
+    // options.AddDefaultPolicy(policy => policy.AllowAnyOrigin());
 
+    options.AddPolicy("cors_policy",
+    builder =>
+    {
+        builder.WithOrigins("http://localhost:3003").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+        builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+    });
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -41,6 +51,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCors("cors_policy");
 
 app.UseAuthorization();
 
