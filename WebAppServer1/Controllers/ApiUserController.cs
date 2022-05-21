@@ -15,7 +15,7 @@ namespace WebAppServer1.Controllers
     }
     [Route("api/users")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class ApiUserController : ControllerBase
     {
         // GET: api/users
         [HttpGet]
@@ -42,7 +42,13 @@ namespace WebAppServer1.Controllers
             base.Response.StatusCode = (int)HttpStatusCode.Created;
 
         }
-
+        [HttpPost]
+        public void Post([FromBody]string username, string password, string image, string server, string nickname)
+        {
+            UserF newUser = new UserF(username, password, nickname, image, server, null, null);
+            HardContext.Users.Add(newUser);
+            base.Response.StatusCode = (int)HttpStatusCode.Created;
+        }
         // PUT api/users/5
         [HttpPut("{id}")]
         public void Put([Bind("Title, Body")] string id, string nickname, string server)

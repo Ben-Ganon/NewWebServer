@@ -46,8 +46,6 @@ namespace WebAppServer1.Controllers
         [HttpGet]
         public IEnumerable<ReturnCont> Get()
         {
-
-            
             UserF u = HardContext.Get(nameOfUser);
             if(u == null)
                 return null;

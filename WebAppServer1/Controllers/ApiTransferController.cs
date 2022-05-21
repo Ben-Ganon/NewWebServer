@@ -24,7 +24,7 @@ namespace WebAppServer1.Controllers
             if(from.Contacts.Exists(x => x.Id == to.Username))
             {
                 Chat chatToUpdate = from.Chats.Find(x => x.ContactId == to.Username);
-                Message messageSend = new Message(chatToUpdate.Messages.Count + 1, mcontent, "text", DateTime.Now, true);
+                Message messageSend = new Message(chatToUpdate.Messages.Count, mcontent, "text", DateTime.Now, true);
                 chatToUpdate.Messages.Add(messageSend);
                 return Ok();
 
@@ -32,7 +32,7 @@ namespace WebAppServer1.Controllers
             {
                 List<Message> newChatMessages = new List<Message>();
                 newChatMessages.Add(new Message(1, mcontent, "text", DateTime.Now, true));
-                Chat newChat = new Chat(from.Chats.Count + 1, to.Username, newChatMessages);
+                Chat newChat = new Chat(from.Chats.Count, to.Username, newChatMessages);
                 from.Chats.Add(newChat);
                 return Ok();
             }

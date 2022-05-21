@@ -6,6 +6,7 @@ namespace WebAppServer1.Controllers
     public static class HardContext
     {
         public static  List<UserF> Users;
+        public static string CurrentUser;
         public static  void newDB()
         {
             DateTime dt = DateTime.Now;
@@ -15,27 +16,35 @@ namespace WebAppServer1.Controllers
             List<Chat> chats = new List<Chat>();
 
 
+            for (int i = 0; i < 5; i++)
+            {
+                messages.Add(new Message(i, "Hello"+i,"text", dt.AddSeconds(i), true));
+            }
+            
             Contact Sagiv = new Contact("SagivA", "sag", "Hi", "s1", dt);
             Contact Omri = new Contact("Omri", "om", "Hi", "s1", dt);
             contacts.Add(Sagiv);
             contacts.Add(Omri);
-            Message message1 = new Message(1, "Hello", "text", dt, true);
-            messages.Add(message1);
-            message1 = new Message(1, "Hello", "text", dt.AddSeconds(5), false);
-            messages.Add(message1);
+          
             Chat SagivBen = new Chat(1, "SagivA", messages);
             chats.Add(SagivBen);
             UserF Ben = new UserF("BenG", "1234", "Ben", "A", "s1", chats, contacts);
             Users.Add(Ben);
 
-            contacts = new List<Contact>();
-            messages = new List<Message>();
+
+            List<Contact> contacts2 = new List<Contact>();
+            List<Message> messages2 = new List<Message>();
+            foreach (Message m in messages)
+            {
+                messages2.Add(new Message(m));
+                m.Sent = false;
+            }
             Contact BenC = new Contact("BenG", "bb", "Hi", "s1", dt);
             contacts.Add(BenC);
-            chats = new List<Chat>();
-            Chat BenSag = new Chat(1, "BenG", messages);
-            chats.Add(BenSag);
-            UserF SagivU = new UserF("SagivA", "1111", "Sag", "a", "s1", chats, contacts);
+            var chats2 = new List<Chat>();
+            Chat BenSag = new Chat(1, "BenG", messages2);
+            chats2.Add(BenSag);
+            UserF SagivU = new UserF("SagivA", "1111", "Sag", "a", "s1", chats2, contacts2);
             Users.Add(SagivU);
             
         }

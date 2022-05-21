@@ -27,5 +27,13 @@ namespace ServerFreak.Models
             Created = created;
             Sent = sent;
         }
+        public Message(Message m)
+        {
+            Id = m.Id;
+            Content = m.Content;
+            Type = m.Type;
+            Created = m.Created;
+            Sent = m.Sent;
+        }
     }
 }
