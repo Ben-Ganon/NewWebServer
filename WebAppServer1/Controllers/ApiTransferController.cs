@@ -11,27 +11,27 @@ namespace WebAppServer1.Controllers
     {
         [Route("api/transfer")]
         [HttpPost]
-        public IActionResult Transfer([Bind("Title, Body")] string from, string to, string content)
+        public IActionResult Transfer([Bind("Title, Body")] string mfrom, string mto, string mcontent)
         {
            
-            UserF from = HardContext.Get(m.from);
+            UserF from = HardContext.Get(mfrom);
             if(from == null)
                 return NotFound();
-            UserF to = HardContext.Get(m.to);
+            UserF to = HardContext.Get(mto);
             if (to == null)
                 return NotFound();
 
             if(from.Contacts.Exists(x => x.Id == to.Username))
             {
                 Chat chatToUpdate = from.Chats.Find(x => x.ContactId == to.Username);
-                Message messageSend = new Message(chatToUpdate.Messages.Count + 1, m.content, "text", DateTime.Now, true);
+                Message messageSend = new Message(chatToUpdate.Messages.Count + 1, mcontent, "text", DateTime.Now, true);
                 chatToUpdate.Messages.Add(messageSend);
                 return Ok();
 
             } else
             {
                 List<Message> newChatMessages = new List<Message>();
-                newChatMessages.Add(new Message(1, m.content, "text", DateTime.Now, true));
+                newChatMessages.Add(new Message(1, mcontent, "text", DateTime.Now, true));
                 Chat newChat = new Chat(from.Chats.Count + 1, to.Username, newChatMessages);
                 from.Chats.Add(newChat);
                 return Ok();

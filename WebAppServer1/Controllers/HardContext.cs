@@ -15,17 +15,31 @@ namespace WebAppServer1.Controllers
             List<Chat> chats = new List<Chat>();
 
 
-            Contact Sagiv = new Contact("Sagiv", "sag", "Hi", "s1", dt);
+            Contact Sagiv = new Contact("SagivA", "sag", "Hi", "s1", dt);
+            Contact Omri = new Contact("Omri", "om", "Hi", "s1", dt);
             contacts.Add(Sagiv);
+            contacts.Add(Omri);
             Message message1 = new Message(1, "Hello", "text", dt, true);
             messages.Add(message1);
             message1 = new Message(1, "Hello", "text", dt.AddSeconds(5), false);
             messages.Add(message1);
-            Chat SagivBen = new Chat(1, "Sagiv", messages);
+            Chat SagivBen = new Chat(1, "SagivA", messages);
             chats.Add(SagivBen);
             UserF Ben = new UserF("BenG", "1234", "Ben", "A", "s1", chats, contacts);
             Users.Add(Ben);
+
+            contacts = new List<Contact>();
+            messages = new List<Message>();
+            Contact BenC = new Contact("BenG", "bb", "Hi", "s1", dt);
+            contacts.Add(BenC);
+            chats = new List<Chat>();
+            Chat BenSag = new Chat(1, "BenG", messages);
+            chats.Add(BenSag);
+            UserF SagivU = new UserF("SagivA", "1111", "Sag", "a", "s1", chats, contacts);
+            Users.Add(SagivU);
+            
         }
+        
         public static UserF Get(string username)
         {
             UserF u = Users.First(x => x.Username == username);
