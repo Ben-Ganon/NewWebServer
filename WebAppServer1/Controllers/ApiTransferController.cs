@@ -11,25 +11,32 @@ namespace WebAppServer1.Controllers
     {
         [Route("api/transfer")]
         [HttpPost]
-        public IActionResult Transfer([FromBody] RecMessage m)
+        public IActionResult Transfer([Bind("Title, Body")] string from, string to, string content)
         {
-            string from = m.from;
-            string to = m.to;
-            UserF fromU = HardContext.Get(from);
-            if(fromU == null)
+           
+            UserF from = HardContext.Get(m.from);
+            if(from == null)
                 return NotFound();
-            UserF toU = HardContext.Get(to);
-            if (toU == null)
+            UserF to = HardContext.Get(m.to);
+            if (to == null)
                 return NotFound();
 
-            if(HardContext.Users.Exists(x => x.Username == username)){
-                UserF user = HardContext.Users.Find(x => x.Username == username);
-                Contact from = 
-                Chat userChat = user.Chats.Find(x => x.)
+            if(from.Contacts.Exists(x => x.Id == to.Username))
+            {
+                Chat chatToUpdate = from.Chats.Find(x => x.ContactId == to.Username);
+                Message messageSend = new Message(chatToUpdate.Messages.Count + 1, m.content, "text", DateTime.Now, true);
+                chatToUpdate.Messages.Add(messageSend);
+                return Ok();
 
+            } else
+            {
+                List<Message> newChatMessages = new List<Message>();
+                newChatMessages.Add(new Message(1, m.content, "text", DateTime.Now, true));
+                Chat newChat = new Chat(from.Chats.Count + 1, to.Username, newChatMessages);
+                from.Chats.Add(newChat);
+                return Ok();
             }
             
-            Message newM = new Message();
         }
     }
     public class RecMessage
