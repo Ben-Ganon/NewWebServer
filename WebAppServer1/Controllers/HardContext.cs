@@ -18,7 +18,7 @@ namespace WebAppServer1.Controllers
 
             for (int i = 0; i < 5; i++)
             {
-                messages.Add(new Message(i, "Hello"+i,"text", dt.AddSeconds(i), true));
+                messages.Add(new Message(i, "Hello"+i,"text", dt.AddMinutes(i).ToShortTimeString(), true));
             }
             
             Contact Sagiv = new Contact("SagivA", "sag", "Hi", "s1", dt);
@@ -28,6 +28,8 @@ namespace WebAppServer1.Controllers
           
             Chat SagivBen = new Chat(1, "SagivA", messages);
             chats.Add(SagivBen);
+            Chat OmriBen = new Chat(2, "Omri", null);
+            chats.Add(OmriBen);
             UserF Ben = new UserF("BenG", "1234", "Ben", "A", "s1", chats, contacts);
             Users.Add(Ben);
 
@@ -40,7 +42,7 @@ namespace WebAppServer1.Controllers
                 m.Sent = false;
             }
             Contact BenC = new Contact("BenG", "bb", "Hi", "s1", dt);
-            contacts.Add(BenC);
+            contacts2.Add(BenC);
             var chats2 = new List<Chat>();
             Chat BenSag = new Chat(1, "BenG", messages2);
             chats2.Add(BenSag);
@@ -51,6 +53,8 @@ namespace WebAppServer1.Controllers
         
         public static UserF Get(string username)
         {
+            if (username == "")
+                return null;
             UserF u = Users.First(x => x.Username == username);
             return u;
         }
