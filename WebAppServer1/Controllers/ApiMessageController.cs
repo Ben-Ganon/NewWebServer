@@ -6,12 +6,12 @@ using System.Net;
 
 namespace WebAppServer1.Controllers
 {
-    [Route("api/contacts/{contact}/messages/{id?}")]
+    [Route("api/contacts/{username}/{contact}/messages")]
     [ApiController]
     public class ApiMessageController : ControllerBase
     {
         // GET: api/messages/{contact}/messages
-        [HttpGet("{username}/{contact}")]
+        [HttpGet]
         public IEnumerable<Message> Get(string username, string contact)
         {
             var user = HardContext.Get(username);
@@ -25,7 +25,7 @@ namespace WebAppServer1.Controllers
         }
 
         // GET api/messages/{contact}/messages/181
-        [HttpGet("{username}/{contact}/{id}")]
+        [HttpGet("{id}")]
         public IActionResult Get(string username, string contact, int id)
         {
             var user = HardContext.Get(username);
@@ -41,7 +41,7 @@ namespace WebAppServer1.Controllers
         }
 
         // POST api/messages/{contact}/messages/
-        [HttpPost("{username}/{contact}")]
+        [HttpPost]
         public void Post(string username, string contact, [Bind("Title, Body")] string content)
         {
             var user = HardContext.Get(username);
@@ -64,7 +64,7 @@ namespace WebAppServer1.Controllers
         }
 
         // DELETE api/messages/{contact}/messages
-        [HttpDelete("{username}/{contact}/{id?}")]
+        [HttpDelete("{id}")]
         public void Delete(string username, string contact, int id)
         {
             var user = HardContext.Get(username);

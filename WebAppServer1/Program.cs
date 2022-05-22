@@ -61,6 +61,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Reviews}/{action=Index}/{id?}");
 
+
 //app.UseEndpoints(endpoints =>
 //{
 //    endpoints.MapHub<SignalHub>("/SignalHub");
