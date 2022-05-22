@@ -6,7 +6,7 @@ using System.Net;
 
 namespace WebAppServer1.Controllers
 {
-    [Route("api/contacts/{username}/{contact}/messages/{id?}")]
+    [Route("api/contacts/{contact}/messages/{id?}")]
     [ApiController]
     public class ApiMessageController : ControllerBase
     {
@@ -40,9 +40,9 @@ namespace WebAppServer1.Controllers
             return Ok(message);
         }
 
-        // POST api/messages/{contact}/messages/181
-        [HttpPost("{username}/{contact}/{id}")]
-        public void Post(string username, string contact, [Bind("Title, Body")] string to, string content)
+        // POST api/messages/{contact}/messages/
+        [HttpPost("{username}/{contact}")]
+        public void Post(string username, string contact, [Bind("Title, Body")] string content)
         {
             var user = HardContext.Get(username);
             var chat = user.Chats.Find(x => x.ContactId == contact);

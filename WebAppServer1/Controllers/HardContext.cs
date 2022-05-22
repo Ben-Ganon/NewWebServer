@@ -18,7 +18,7 @@ namespace WebAppServer1.Controllers
 
             for (int i = 0; i < 5; i++)
             {
-                messages.Add(new Message(i, "Hello"+i,"text", dt.AddSeconds(i), true));
+                messages.Add(new Message(i, "Hello"+i,"text", dt.ToShortTimeString(), true));
             }
             
             Contact Sagiv = new Contact("SagivA", "sag", "Hi", "s1", dt);
