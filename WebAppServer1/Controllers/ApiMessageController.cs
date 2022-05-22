@@ -6,7 +6,12 @@ using System.Net;
 
 namespace WebAppServer1.Controllers
 {
-    [Route("api/contacts/{username}/{contact}/messages")]
+    public class Mess
+    {
+        public string content { get; set; }
+        public string userApi { get; set; }
+    }
+    [Route("api/contacts/{contact}/messages")]
     [ApiController]
     public class ApiMessageController : ControllerBase
     {
@@ -42,16 +47,16 @@ namespace WebAppServer1.Controllers
 
         // POST api/messages/{contact}/messages/
         [HttpPost]
-        public void Post(string username, string contact, [Bind("Title, Body")] string content)
+        public void Post(string contact, [FromBody] Mess m)
         {
-            var user = HardContext.Get(username);
+            var user = HardContext.Get(m.userApi);
             var chat = user.Chats.Find(x => x.ContactId == contact);
             if (chat == null)
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return;
             }
-            Message message = new Message(chat.Messages.Count(), content, "text", DateTime.Now.ToShortTimeString(), true);
+            Message message = new Message(chat.Messages.Count(), m.content, "text", DateTime.Now.ToShortTimeString(), true);
             chat.Messages.Add(message);
             base.Response.StatusCode = (int)HttpStatusCode.NoContent;
 
