@@ -24,14 +24,14 @@ namespace WebAppServer1.Controllers
             if(from.Contacts.Exists(x => x.Id == to.Username))
             {
                 Chat chatToUpdate = from.Chats.Find(x => x.ContactId == to.Username);
-                Message messageSend = new Message(chatToUpdate.Messages.Count, mcontent, "text", DateTime.Now, true);
+                Message messageSend = new Message(chatToUpdate.Messages.Count, mcontent, "text", DateTime.Now.ToShortTimeString(), true);
                 chatToUpdate.Messages.Add(messageSend);
                 return Ok();
 
             } else
             {
                 List<Message> newChatMessages = new List<Message>();
-                newChatMessages.Add(new Message(1, mcontent, "text", DateTime.Now, true));
+                newChatMessages.Add(new Message(1, mcontent, "text", DateTime.Now.ToShortTimeString(), true));
                 Chat newChat = new Chat(from.Chats.Count, to.Username, newChatMessages);
                 from.Chats.Add(newChat);
                 return Ok();

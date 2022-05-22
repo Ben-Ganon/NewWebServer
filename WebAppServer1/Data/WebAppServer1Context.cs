@@ -14,7 +14,7 @@ namespace WebAppServer1.Data
             : base(options)
         {
         }
-
+        public DbSet<ServerFreak.Models.Review>? Review { get; set; }
         public DbSet<ServerFreak.Models.Chat>? Chat { get; set; }
 
         public DbSet<WebAppServer1.Models.Contact> Contact { get; set; }

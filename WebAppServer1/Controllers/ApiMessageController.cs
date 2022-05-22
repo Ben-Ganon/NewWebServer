@@ -1,43 +1,86 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ServerFreak.Models;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebAppServer1.Controllers
 {
-    [Route("api/contacts/messages")]
+    [Route("api/contacts/{username}/{contact}/messages/{id?}")]
     [ApiController]
     public class ApiMessageController : ControllerBase
     {
-        // GET: api/<MessageController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // GET: api/messages/{contact}/messages
+        [HttpGet("{username}/{contact}")]
+        public IEnumerable<Message> Get(string username, string contact)
         {
-            return new string[] { "value1", "value2" };
+            var user = HardContext.Get(username);
+            var retCont = user.Chats.Find(x => x.ContactId == contact);
+            if (retCont == null || retCont.Messages == null) {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return null;
+            }
+            base.Response.StatusCode = (int)HttpStatusCode.NoContent;
+            return retCont.Messages;
         }
 
-        // GET api/<MessageController>/5
-        [HttpGet("{username}")]
-        public string Get(int id)
+        // GET api/messages/{contact}/messages/181
+        [HttpGet("{username}/{contact}/{id}")]
+        public IActionResult Get(string username, string contact, int id)
         {
-            return "value";
+            var user = HardContext.Get(username);
+            if (user == null)
+                return NotFound();
+            var chat = user.Chats.Find(x => x.ContactId == contact);
+            if (chat == null)
+                return NotFound();
+            var message = chat.Messages.ElementAt(id);
+            if (message == null)
+                return NotFound();
+            return Ok(message);
         }
 
-        // POST api/<MessageController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        // POST api/messages/{contact}/messages/181
+        [HttpPost("{username}/{contact}/{id}")]
+        public void Post(string username, string contact, [Bind("Title, Body")] string to, string content)
         {
+            var user = HardContext.Get(username);
+            var chat = user.Chats.Find(x => x.ContactId == contact);
+            if (chat == null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+            Message message = new Message(chat.Messages.Count(), content, "text", DateTime.Now.ToShortTimeString(), true);
+            chat.Messages.Add(message);
+            base.Response.StatusCode = (int)HttpStatusCode.NoContent;
+
         }
 
-        // PUT api/<MessageController>/5
+        // PUT api/messages/{contact}/messages/181
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<MessageController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/messages/{contact}/messages
+        [HttpDelete("{username}/{contact}/{id?}")]
+        public void Delete(string username, string contact, int id)
         {
+            var user = HardContext.Get(username);
+            var chat = user.Chats.Find(x => x.ContactId == contact);
+            if (chat == null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+            var message = chat.Messages.ElementAt(id);
+            if(message == null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+            chat.Messages.RemoveAll(x => x.Id == id);
         }
     }
 }

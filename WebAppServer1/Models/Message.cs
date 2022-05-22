@@ -13,13 +13,13 @@ namespace ServerFreak.Models
 
         public string Type { get; set; }
 
-        public DateTime Created { get; set; }
+        public string Created { get; set; }
 
         [Required]
         public bool Sent { get; set; }
 
        public Message() {}
-        public Message(int id, string content, string type, DateTime created, bool sent)
+        public Message(int id, string content, string type, string created, bool sent)
         {
             Id = id;
             Content = content;
