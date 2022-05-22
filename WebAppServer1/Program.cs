@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebAppServer1.Controllers;
 using WebAppServer1.Data;
+using WebAppServer1.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WebAppServer1Context>(options =>
@@ -59,6 +60,12 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Reviews}/{action=Index}/{id?}");
+
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapHub<SignalHub>("/SignalHub");
+//});
 
 app.UseSession();
 

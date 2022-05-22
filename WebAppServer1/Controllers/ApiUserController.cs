@@ -42,6 +42,7 @@ namespace WebAppServer1.Controllers
             base.Response.StatusCode = (int)HttpStatusCode.Created;
 
         }
+        
         // PUT api/users/5
         [HttpPut("{id}")]
         public void Put([Bind("Title, Body")] string id, string nickname, string server)
@@ -66,5 +67,6 @@ namespace WebAppServer1.Controllers
             base.Response.StatusCode = (int)HttpStatusCode.NoContent;
 
         }
+
     }
 }
