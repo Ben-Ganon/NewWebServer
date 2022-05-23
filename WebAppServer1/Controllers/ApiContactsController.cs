@@ -28,6 +28,11 @@ namespace WebAppServer1.Controllers
 
         public DateTime lastdate { get; set; }
     }
+    public class Cont
+    {
+        public string name { get; set; }
+        public string userApi { get; set; }
+    }
     [Route("api/contacts")]
     [ApiController]
     public class ApiContactsController : ControllerBase
@@ -66,13 +71,17 @@ namespace WebAppServer1.Controllers
 
         // POST api/contacts
         [HttpPost]
-        public void Post([FromBody] Contact c)
+        public void Post([FromBody] Cont c)
         {
-            c.LastDate = DateTime.Now;
-            
-            HardContext.AddContact(nameOfUser, c);
-            HardContext.SaveChanges();
+
+            var user = HardContext.Get(c.userApi);
+            var contacts = user.Contacts.ToList();
+            Contact newContact = new Contact(c.name, c.name, "Start New Conversation", "s1", DateTime.Now);
+            user.Contacts.Add(newContact);
             base.Response.StatusCode = (int)HttpStatusCode.Created;
+            Chat chat = new Chat(user.Chats.Count()+1,c.name, new List<Message>());
+            user.Chats.Add(chat);
+            HardContext.SaveChanges();
         }
 
         // PUT api/contacts/5

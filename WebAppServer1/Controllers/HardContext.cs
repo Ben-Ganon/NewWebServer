@@ -28,7 +28,7 @@ namespace WebAppServer1.Controllers
           
             Chat SagivBen = new Chat(1, "SagivA", messages);
             chats.Add(SagivBen);
-            Chat OmriBen = new Chat(2, "Omri", null);
+            Chat OmriBen = new Chat(2, "Omri", new List<Message>());
             chats.Add(OmriBen);
             UserF Ben = new UserF("BenG", "1234", "Ben", "A", "s1", chats, contacts);
             Users.Add(Ben);
@@ -48,7 +48,10 @@ namespace WebAppServer1.Controllers
             chats2.Add(BenSag);
             UserF SagivU = new UserF("SagivA", "1111", "Sag", "a", "s1", chats2, contacts2);
             Users.Add(SagivU);
-            
+
+            UserF Uri = new UserF("Uri", "1111", "Uriel", "a", "s1", null, null);
+            Users.Add(Uri);
+
         }
         
         public static UserF Get(string username)
