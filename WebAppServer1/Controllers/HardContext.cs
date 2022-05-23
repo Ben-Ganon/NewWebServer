@@ -30,7 +30,7 @@ namespace WebAppServer1.Controllers
             chats.Add(SagivBen);
             Chat OmriBen = new Chat(2, "Omri", new List<Message>());
             chats.Add(OmriBen);
-            UserF Ben = new UserF("BenG", "1234", "Ben", "A", "s1", chats, contacts);
+            UserF Ben = new UserF("BenG", "1234", "Ben", "../images/p1.jpg", "s1", chats, contacts);
             Users.Add(Ben);
 
 
@@ -46,11 +46,15 @@ namespace WebAppServer1.Controllers
             var chats2 = new List<Chat>();
             Chat BenSag = new Chat(1, "BenG", messages2);
             chats2.Add(BenSag);
-            UserF SagivU = new UserF("SagivA", "1111", "Sag", "a", "s1", chats2, contacts2);
+            UserF SagivU = new UserF("SagivA", "1111", "Sag", "../images/p2.png", "s1", chats2, contacts2);
             Users.Add(SagivU);
 
-            UserF Uri = new UserF("Uri", "1111", "Uriel", "a", "s1", null, null);
+            UserF Uri = new UserF("Uri", "1111", "Uriel", "../images/p3.png", "s1", null, null);
             Users.Add(Uri);
+
+
+            UserF Sahar = new UserF("Sahar", "1111", "One Rofe", "../images/p4.jpg", "s1", null, null);
+            Users.Add(Sahar);
 
         }
         
