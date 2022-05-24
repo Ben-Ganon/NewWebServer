@@ -3,6 +3,11 @@ using WebAppServer1.Models;
 
 namespace WebAppServer1.Controllers
 {
+
+    public class UserPayload
+    {
+        public string username { get; set; }
+    }
     public static class HardContext
     {
         public static  List<UserF> Users;
@@ -27,7 +32,9 @@ namespace WebAppServer1.Controllers
           
             Chat SagivBen = new Chat(1, "SagivA", messages);
             chats.Add(SagivBen);
-            UserF Ben = new UserF("BenG", "1234", "Ben", "A", "s1", chats, contacts);
+            Chat OmriBen = new Chat(2, "Omri", new List<Message>());
+            chats.Add(OmriBen);
+            UserF Ben = new UserF("BenG", "1234", "Ben", "../images/p1.jpg", "s1", chats, contacts);
             Users.Add(Ben);
 
 
@@ -39,19 +46,32 @@ namespace WebAppServer1.Controllers
                 m.Sent = false;
             }
             Contact BenC = new Contact("BenG", "bb", "Hi", "s1", dt);
-            contacts.Add(BenC);
+            contacts2.Add(BenC);
             var chats2 = new List<Chat>();
             Chat BenSag = new Chat(1, "BenG", messages2);
             chats2.Add(BenSag);
-            UserF SagivU = new UserF("SagivA", "1111", "Sag", "a", "s1", chats2, contacts2);
+            UserF SagivU = new UserF("SagivA", "1111", "Sag", "../images/p2.png", "s1", chats2, contacts2);
             Users.Add(SagivU);
-            
+
+            UserF Uri = new UserF("Uri", "1111", "Uriel", "../images/p3.png", "s1", null, null);
+            Users.Add(Uri);
+
+
+            UserF Sahar = new UserF("Sahar", "1111", "One Rofe", "../images/p4.jpg", "s1", null, null);
+            Users.Add(Sahar);
+
         }
         
         public static UserF Get(string username)
         {
-            UserF u = Users.First(x => x.Username == username);
-            return u;
+            if (username == "")
+                return null;
+            if(Users.Exists(x => x.Username == username))
+            {
+                UserF u = Users.First(x => x.Username == username);
+                return u;
+            }
+            return null;
         }
         public static List<UserF> ToListAsync()
         {

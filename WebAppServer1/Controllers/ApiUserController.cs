@@ -10,8 +10,9 @@ namespace WebAppServer1.Controllers
 
     public class PutUser
     {
-        public string Nickname;
-        public string Server;
+        public string UserName { get; set; }  
+        public string Nickname { get; set; }
+        public string Server { get; set; }
     }
     [Route("api/users")]
     [ApiController]
@@ -45,13 +46,13 @@ namespace WebAppServer1.Controllers
         
         // PUT api/users/5
         [HttpPut("{id}")]
-        public void Put([Bind("Title, Body")] string id, string nickname, string server)
+        public void Put([FromBody] PutUser u)
         {
-            UserF seek = HardContext.Get(id);
+            UserF seek = HardContext.Get(u.UserName);
             if (seek == null)
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            seek.NickName = nickname;
-            seek.Server = server;
+            seek.NickName = u.Nickname;
+            seek.Server = u.Server;
             base.Response.StatusCode = (int)HttpStatusCode.NoContent;
 
         }

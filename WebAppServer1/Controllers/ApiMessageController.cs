@@ -6,7 +6,12 @@ using System.Net;
 
 namespace WebAppServer1.Controllers
 {
-    [Route("api/contacts/{username}/{contact}/messages")]
+    public class Mess
+    {
+        public string content { get; set; }
+        public string userApi { get; set; }
+    }
+    [Route("api/contacts/{contact}/messages")]
     [ApiController]
     public class ApiMessageController : ControllerBase
     {
@@ -20,13 +25,13 @@ namespace WebAppServer1.Controllers
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return null;
             }
-            base.Response.StatusCode = (int)HttpStatusCode.NoContent;
+            base.Response.StatusCode = (int)HttpStatusCode.OK;
             return retCont.Messages;
         }
 
         // GET api/messages/{contact}/messages/181
         [HttpGet("{id}")]
-        public IActionResult Get(string username, string contact, int id)
+        public IActionResult Get([FromQuery]string username, string contact, int id)
         {
             var user = HardContext.Get(username);
             if (user == null)
@@ -42,9 +47,9 @@ namespace WebAppServer1.Controllers
 
         // POST api/messages/{contact}/messages/
         [HttpPost]
-        public void Post(string username, string contact, [Bind("Title, Body")] string content)
+        public void Post(string contact, [FromQuery] UserPayload u, [FromBody]string content)
         {
-            var user = HardContext.Get(username);
+            var user = HardContext.Get(u.username);
             var chat = user.Chats.Find(x => x.ContactId == contact);
             if (chat == null)
             {
@@ -53,7 +58,7 @@ namespace WebAppServer1.Controllers
             }
             Message message = new Message(chat.Messages.Count(), content, "text", DateTime.Now.ToShortTimeString(), true);
             chat.Messages.Add(message);
-            base.Response.StatusCode = (int)HttpStatusCode.NoContent;
+            base.Response.StatusCode = (int)HttpStatusCode.Created;
 
         }
 
@@ -65,7 +70,7 @@ namespace WebAppServer1.Controllers
 
         // DELETE api/messages/{contact}/messages
         [HttpDelete("{id}")]
-        public void Delete(string username, string contact, int id)
+        public void Delete([FromQuery] string username, string contact, int id)
         {
             var user = HardContext.Get(username);
             var chat = user.Chats.Find(x => x.ContactId == contact);
