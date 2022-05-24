@@ -6,7 +6,6 @@ namespace WebAppServer1.Controllers
     public static class HardContext
     {
         public static  List<UserF> Users;
-        public static string CurrentUser;
         public static  void newDB()
         {
             DateTime dt = DateTime.Now;
