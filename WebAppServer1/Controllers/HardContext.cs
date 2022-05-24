@@ -3,6 +3,11 @@ using WebAppServer1.Models;
 
 namespace WebAppServer1.Controllers
 {
+
+    public class UserPayload
+    {
+        public string username { get; set; }
+    }
     public static class HardContext
     {
         public static  List<UserF> Users;
@@ -62,8 +67,12 @@ namespace WebAppServer1.Controllers
         {
             if (username == "")
                 return null;
-            UserF u = Users.First(x => x.Username == username);
-            return u;
+            if(Users.Exists(x => x.Username == username))
+            {
+                UserF u = Users.First(x => x.Username == username);
+                return u;
+            }
+            return null;
         }
         public static List<UserF> ToListAsync()
         {

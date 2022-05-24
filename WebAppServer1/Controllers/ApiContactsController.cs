@@ -30,28 +30,28 @@ namespace WebAppServer1.Controllers
     }
     public class Cont
     {
+        public string id { get; set; }
         public string name { get; set; }
-        public string userApi { get; set; }
+        public string server { get; set; }
     }
     [Route("api/contacts")]
     [ApiController]
     public class ApiContactsController : ControllerBase
     {
         
-        private readonly string nameOfUser;
 
         public ApiContactsController()
         {
             
-            //string nameOfUser = HttpContext.Session.GetString("username");
-            nameOfUser = "BenG";
+            //string nameOfUser = HttpContext.Session.GetString("user");
 
         }
         // GET: api/contacts
         [HttpGet]
-        public IEnumerable<ReturnCont> Get()
+        public IEnumerable<ReturnCont> Get([FromQuery] UserPayload user)
         {
-            UserF u = HardContext.Get(nameOfUser);
+            
+            UserF u = HardContext.Get(user.username);
             if(u == null)
                 return null;
             var c = u.Contacts.Select(x => new ReturnCont(x));
@@ -60,9 +60,9 @@ namespace WebAppServer1.Controllers
 
         // GET api/contacts/5
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get([FromQuery] UserPayload user, string id)
         {
-            var c = HardContext.Get(nameOfUser).Contacts.Find(x => x.Id == id);
+            var c = HardContext.Get(user.username).Contacts.Find(x => x.Id == id);
             if(c == null)
                 return NotFound();
             ReturnCont d = new ReturnCont(c);
@@ -71,10 +71,10 @@ namespace WebAppServer1.Controllers
 
         // POST api/contacts
         [HttpPost]
-        public void Post([FromBody] Cont c)
+        public void Post([FromQuery] UserPayload u, [FromBody] Cont c)
         {
 
-            var user = HardContext.Get(c.userApi);
+            var user = HardContext.Get(u.username);
             var contacts = user.Contacts.ToList();
             Contact newContact = new Contact(c.name, c.name, "Start New Conversation", "s1", DateTime.Now);
             user.Contacts.Add(newContact);
@@ -86,9 +86,9 @@ namespace WebAppServer1.Controllers
 
         // PUT api/contacts/5
         [HttpPut("{id}")]
-        public void Put([Bind("Title, Body")] string id, string newName, string newServer)
+        public void Put([FromBody] UserPayload user, [Bind("Title, Body")] string id, string newName, string newServer)
         {
-            var c = HardContext.PutContact(nameOfUser, id, newServer, newName);
+            var c = HardContext.PutContact(user.username, id, newServer, newName);
             if (c == null)
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -100,9 +100,9 @@ namespace WebAppServer1.Controllers
 
         // DELETE api/<ApiContactsController>/5
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public void Delete([FromQuery] UserPayload user, string id)
         {
-            var r = HardContext.DeleteContact(nameOfUser, id);
+            var r = HardContext.DeleteContact(user.username, id);
 
 
         }
