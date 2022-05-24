@@ -34,6 +34,13 @@ namespace WebAppServer1.Controllers
         public string name { get; set; }
         public string server { get; set; }
     }
+    public class PutCont
+    {
+        public string name { get; set; }
+        public string server { get; set; }
+    }
+
+
     [Route("api/contacts")]
     [ApiController]
     public class ApiContactsController : ControllerBase
@@ -86,9 +93,9 @@ namespace WebAppServer1.Controllers
 
         // PUT api/contacts/5
         [HttpPut("{id}")]
-        public void Put([FromBody] UserPayload user, [Bind("Title, Body")] string id, string newName, string newServer)
+        public void Put([FromQuery] UserPayload user,string id, [FromBody] PutCont d)
         {
-            var c = HardContext.PutContact(user.username, id, newServer, newName);
+            var c = HardContext.PutContact(user.username, id, d.server, d.name);
             if (c == null)
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
