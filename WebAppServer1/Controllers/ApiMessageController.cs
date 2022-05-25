@@ -9,7 +9,6 @@ namespace WebAppServer1.Controllers
     public class Mess
     {
         public string content { get; set; }
-        public string userApi { get; set; }
     }
     [Route("api/contacts/{contact}/messages")]
     [ApiController]
@@ -47,17 +46,34 @@ namespace WebAppServer1.Controllers
 
         // POST api/messages/{contact}/messages/
         [HttpPost]
-        public void Post(string contact, [FromQuery] UserPayload u, [FromBody]string content)
+        public void Post(string contact, [FromQuery] string username, [FromBody]Mess m)
         {
-            var user = HardContext.Get(u.username);
+            var user = HardContext.Get(username);
             var chat = user.Chats.Find(x => x.ContactId == contact);
             if (chat == null)
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return;
             }
-            Message message = new Message(chat.Messages.Count(), content, "text", DateTime.Now.ToShortTimeString(), true);
+            Message message = new Message(chat.Messages.Count(), m.content, "text", DateTime.Now.ToShortTimeString(), true);
             chat.Messages.Add(message);
+
+            var userReceive = HardContext.Get(contact);
+            if (userReceive == null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+            chat = userReceive.Chats.Find(x => x.ContactId == username);
+            if (chat == null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+            Message m2 = new Message(message);
+            m2.Sent = false;
+            chat.Messages.Add(m2);  
+
             base.Response.StatusCode = (int)HttpStatusCode.Created;
 
         }

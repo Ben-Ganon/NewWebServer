@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="jQuery" Version="3.6.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -21,6 +22,22 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\static\css\main.e53d638e.css.map" />
+    <None Include="wwwroot\static\js\787.f53f217d.chunk.js" />
+    <None Include="wwwroot\static\js\787.f53f217d.chunk.js.map" />
+    <None Include="wwwroot\static\js\main.3a94621c.js" />
+    <None Include="wwwroot\static\js\main.3a94621c.js.map" />
+    <None Include="wwwroot\static\js\main.bc2c356d.js" />
+    <None Include="wwwroot\static\js\main.bc2c356d.js.map" />
+    <None Include="wwwroot\static\js\main.f2f70ffe.js" />
+    <None Include="wwwroot\static\js\main.f2f70ffe.js.map" />
+    <None Include="wwwroot\static\js\main.f52fc2f4.js" />
+    <None Include="wwwroot\static\js\main.f52fc2f4.js.map" />
+    <None Include="wwwroot\static\js\main.f5598174.js" />
+    <None Include="wwwroot\static\js\main.f5598174.js.map" />
   </ItemGroup>
 
 </Project>

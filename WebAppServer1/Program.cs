@@ -25,6 +25,8 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(1);
 });
 
+builder.Services.AddSignalR();
+
 builder.Services.AddCors(options =>
 {
     // options.AddDefaultPolicy(policy => policy.AllowAnyOrigin());
@@ -62,10 +64,10 @@ app.MapControllerRoute(
     pattern: "{controller=Reviews}/{action=Index}/{id?}");
 
 
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapHub<SignalHub>("/SignalHub");
-//});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<SignalHub>("/SignalHub");
+});
 
 app.UseSession();
 

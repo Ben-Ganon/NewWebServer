@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "./static/css/main.e53d638e.css",
+    "main.js": "./static/js/main.baf0a506.js",
+    "static/js/787.f53f217d.chunk.js": "./static/js/787.f53f217d.chunk.js",
+    "static/media/world.mp4": "./static/media/world.5f55925d87b05fff5ee1.mp4",
+    "static/media/nick.png": "./static/media/nick.aaf0ccbbecb2d124eca5.png",
+    "static/media/background.jpg": "./static/media/background.dc7c1cab281e7af0b59e.jpg",
+    "static/media/angry.png": "./static/media/angry.e1fe5c85880e56436798.png",
+    "static/media/mark.png": "./static/media/mark.f61f8dc11daebe498da2.png",
+    "static/media/you-stoopid.mp3": "./static/media/you-stoopid.ef0ad3f07777bb25474d.mp3",
+    "static/media/defaultContact.jpg": "./static/media/defaultContact.e06e5b37015eee0bef51.jpg",
+    "static/media/youngMidoria.jpg": "./static/media/youngMidoria.50e9c72ad4c27856db77.jpg",
+    "static/media/bil.jpg": "./static/media/bil.4c6a591140409db946cc.jpg",
+    "static/media/video.png": "./static/media/video.cdf97fc40d8cb55d1141.png",
+    "static/media/allmight.jpg": "./static/media/allmight.7c2ffa2a95e2a4a30461.jpg",
+    "static/media/record.png": "./static/media/record.a743362d10040664a2bc.png",
+    "static/media/heart.png": "./static/media/heart.908259a909cf8f1ddf3b.png",
+    "static/media/p4.jpg": "./static/media/p4.1ac14c1a72f5ed981a15.jpg",
+    "index.html": "./index.html",
+    "main.e53d638e.css.map": "./static/css/main.e53d638e.css.map",
+    "main.baf0a506.js.map": "./static/js/main.baf0a506.js.map",
+    "787.f53f217d.chunk.js.map": "./static/js/787.f53f217d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e53d638e.css",
+    "static/js/main.baf0a506.js"
+  ]
+}

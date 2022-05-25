@@ -78,15 +78,20 @@ namespace WebAppServer1.Controllers
 
         // POST api/contacts
         [HttpPost]
-        public void Post([FromQuery] UserPayload u, [FromBody] Cont c)
+        public void Post([FromQuery] string username, [FromBody] Cont c)
         {
 
-            var user = HardContext.Get(u.username);
+            var user = HardContext.Get(username);
+            if(user == null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
             var contacts = user.Contacts.ToList();
-            Contact newContact = new Contact(c.name, c.name, "Start New Conversation", "s1", DateTime.Now);
+            Contact newContact = new Contact(c.id, c.name, "Start New Conversation", "s1", DateTime.Now);
             user.Contacts.Add(newContact);
             base.Response.StatusCode = (int)HttpStatusCode.Created;
-            Chat chat = new Chat(user.Chats.Count()+1,c.name, new List<Message>());
+            Chat chat = new Chat(user.Chats.Count()+1,c.id, new List<Message>());
             user.Chats.Add(chat);
             HardContext.SaveChanges();
         }
