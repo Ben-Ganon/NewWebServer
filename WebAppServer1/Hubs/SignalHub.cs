@@ -10,5 +10,10 @@ namespace WebAppServer1.Hubs
         {
             await Clients.All.SendAsync("MessageSent",from,to, message);
         }
+
+        public async Task UpdateContacts(string user, string contact)
+        {
+            await Clients.All.SendAsync("ClientAdded", user, contact);
+        }
     }
 }

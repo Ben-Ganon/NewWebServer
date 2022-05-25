@@ -90,10 +90,23 @@ namespace WebAppServer1.Controllers
             var contacts = user.Contacts.ToList();
             Contact newContact = new Contact(c.id, c.name, "Start New Conversation", "s1", DateTime.Now);
             user.Contacts.Add(newContact);
-            base.Response.StatusCode = (int)HttpStatusCode.Created;
             Chat chat = new Chat(user.Chats.Count()+1,c.id, new List<Message>());
             user.Chats.Add(chat);
-            HardContext.SaveChanges();
+
+            var contUser = HardContext.Get(c.id);
+            if (contUser == null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+            Contact newCont = new Contact(username, username, "Start New Conversation", "s1", DateTime.Now);
+            contUser.Contacts.Add(newCont);
+            Chat chat2 = new Chat(contUser.Chats.Count() + 1, username, new List<Message>());
+            contUser.Chats.Add(chat2);
+
+            base.Response.StatusCode = (int)HttpStatusCode.Created;
+
+
         }
 
         // PUT api/contacts/5

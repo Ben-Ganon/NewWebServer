@@ -28,12 +28,12 @@ namespace WebAppServer1.Controllers
             Contact Sagiv = new Contact("SagivA", "sag", "Hi", "s1", dt);
             Contact Omri = new Contact("Omri", "om", "Hi", "s1", dt);
             contacts.Add(Sagiv);
-            contacts.Add(Omri);
+           // contacts.Add(Omri);
           
             Chat SagivBen = new Chat(1, "SagivA", messages);
             chats.Add(SagivBen);
             Chat OmriBen = new Chat(2, "Omri", new List<Message>());
-            chats.Add(OmriBen);
+            //chats.Add(OmriBen);
             UserF Ben = new UserF("BenG", "1234", "Ben", "../images/p1.jpg", "s1", chats, contacts);
             Users.Add(Ben);
 
@@ -52,6 +52,16 @@ namespace WebAppServer1.Controllers
             chats2.Add(BenSag);
             UserF SagivU = new UserF("SagivA", "1111", "Sag", "../images/p2.png", "s1", chats2, contacts2);
             Users.Add(SagivU);
+
+            List<Contact> contacts3 = new List<Contact>();
+            Contact sagiv2 = new Contact("SagivA", "aa", "Hi", "s1", dt);
+            contacts3.Add(sagiv2);
+            List<Message> messages3 = new List<Message>();
+            var chats3 = new List<Chat>();
+            Chat OmriSagiv = new Chat(1, "Sagiv", messages2);
+            chats3.Add(OmriSagiv);
+            UserF OmriU = new UserF("Omri", "1111", "omm", "../images/p3.png", "s1", chats3, contacts3);
+            Users.Add(OmriU);
 
             UserF Uri = new UserF("Uri", "1111", "Uriel", "../images/p3.png", "s1", null, null);
             Users.Add(Uri);
