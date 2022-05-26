@@ -63,11 +63,11 @@ namespace WebAppServer1.Controllers
             UserF OmriU = new UserF("Omri", "1111", "omm", "../images/p3.png", "s1", chats3, contacts3);
             Users.Add(OmriU);
 
-            UserF Uri = new UserF("Uri", "1111", "Uriel", "../images/p3.png", "s1", null, null);
+            UserF Uri = new UserF("Uri", "1111", "Uriel", "../images/p3.png", "s1", new List<Chat>(), new List<Contact>());
             Users.Add(Uri);
 
 
-            UserF Sahar = new UserF("Sahar", "1111", "One Rofe", "../images/p4.jpg", "s1", null, null);
+            UserF Sahar = new UserF("Sahar", "1111", "One Rofe", "../images/p4.jpg", "s1", new List<Chat>(), new List<Contact>());
             Users.Add(Sahar);
 
         }

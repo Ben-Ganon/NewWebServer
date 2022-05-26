@@ -4,12 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Freak Reviews</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<Card  style="{    color: #00d8ff}">
+
+<table class="table" >
     <thead>
         <tr>
             <th>
@@ -55,10 +57,10 @@
             </td>
         </tr>
 }
-<textarea></textarea>
 @section Scripts{
     <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
     <script src="~/js/ws.js"></script>
 }
     </tbody>
 </table>
+</Card>
