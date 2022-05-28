@@ -80,11 +80,16 @@ namespace WebAppServer1.Controllers
         [HttpPost]
         public void Post([FromQuery] string username, [FromBody] Cont c)
         {
-
             var user = HardContext.Get(username);
             if(user == null)
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+            Contact checkExist = user.Contacts.Find(x => x.Id == c.id);
+            if(checkExist != null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.Created;
                 return;
             }
             var contacts = user.Contacts.ToList();
@@ -97,6 +102,12 @@ namespace WebAppServer1.Controllers
             if (contUser == null)
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+            checkExist = contUser.Contacts.Find(x => x.Id == username);
+            if (checkExist != null)
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.Created;
                 return;
             }
             Contact newCont = new Contact(username, username, "Start New Conversation", "s1", DateTime.Now);
@@ -113,6 +124,7 @@ namespace WebAppServer1.Controllers
         [HttpPut("{id}")]
         public void Put([FromQuery] UserPayload user,string id, [FromBody] PutCont d)
         {
+            
             var c = HardContext.PutContact(user.username, id, d.server, d.name);
             if (c == null)
             {
