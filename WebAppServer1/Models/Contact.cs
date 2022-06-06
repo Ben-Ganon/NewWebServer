@@ -5,7 +5,7 @@ namespace WebAppServer1.Models
 {
     public class Contact
     {
-        [Required]
+        [Key]
         public string Id { get; set; }
         [Required]
         public string Name { get; set; }

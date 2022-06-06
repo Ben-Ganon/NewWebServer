@@ -6,17 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ServerFreak.Models;
-using WebAppServer1.Data;
+//using WebAppServer1.Data;
 
 namespace WebAppServer1.Controllers
 {
     public class ReviewsController : Controller
     {
-        private readonly WebAppServer1Context _context;
 
-        public ReviewsController(WebAppServer1Context context)
+        public ReviewsController()
         {
-            _context = context;
+       
         }
 
         
@@ -24,37 +23,51 @@ namespace WebAppServer1.Controllers
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Review.ToListAsync());
+            using (var db = new WebServerContext())
+            {
+                return View(await db.Reviews.ToListAsync());
+            }
         }
         public async Task<IActionResult> Search()
         {
-            return View(await _context.Review.ToListAsync());
+            using(var db = new WebServerContext())
+            {
+                return View(db.Reviews.ToListAsync());
+
+            }
         }
 
 
         public async Task<IActionResult> Search2(string query)
         {
-            var q = _context.Review.Where(rev => rev.Title.Contains(query) || rev.Description.Contains(query)
-            || rev.Name.Contains(query));
-            return Json(await q.ToListAsync());
+            using (var db = new WebServerContext())
+            {
+                var q = db.Reviews.Where(rev => rev.Title.Contains(query) || rev.Description.Contains(query)
+          || rev.Name.Contains(query));
+                return Json(await q.ToListAsync());
+            }
+              
         }
 
         // GET: Reviews/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Review == null)
+            using (var db = new WebServerContext())
             {
-                return NotFound();
-            }
+                if (id == null || db.Reviews == null)
+                {
+                    return NotFound();
+                }
 
-            var review = await _context.Review
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (review == null)
-            {
-                return NotFound();
-            }
+                var review = await db.Reviews
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (review == null)
+                {
+                    return NotFound();
+                }
 
-            return View(review);
+                return View(review);
+            }
         }
 
         // GET: Reviews/Create
@@ -70,30 +83,38 @@ namespace WebAppServer1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Stars,Name")] Review review)
         {
-            if (ModelState.IsValid)
+            using (var db = new WebServerContext())
             {
-                review.Time = DateTime.Now;
-                _context.Add(review);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+
+                    review.Time = DateTime.Now;
+                    db.Add(review);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(review);
             }
-            return View(review);
         }
 
         // GET: Reviews/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Review == null)
+            using (var db = new WebServerContext())
             {
-                return NotFound();
-            }
+                if (id == null || db.Reviews == null)
+                {
+                    return NotFound();
+                }
 
-            var review = await _context.Review.FindAsync(id);
-            if (review == null)
-            {
-                return NotFound();
+                var review = await db.Reviews.FindAsync(id);
+                if (review == null)
+                {
+                    return NotFound();
+                }
+                return View(review);
             }
-            return View(review);
         }
 
         // POST: Reviews/Edit/5
@@ -107,47 +128,52 @@ namespace WebAppServer1.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            using (var db = new WebServerContext())
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    review.Time = DateTime.Now;
-                    _context.Update(review);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReviewExists(review.Id))
+                    try
                     {
-                        return NotFound();
+                        review.Time = DateTime.Now;
+                        db.Update(review);
+                        await db.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ReviewExists(review.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(review);
             }
-            return View(review);
         }
 
         // GET: Reviews/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Review == null)
+            using (var db = new WebServerContext())
             {
-                return NotFound();
-            }
+                if (id == null || db.Reviews == null)
+                {
+                    return NotFound();
+                }
 
-            var review = await _context.Review
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (review == null)
-            {
-                return NotFound();
-            }
+                var review = await db.Reviews
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (review == null)
+                {
+                    return NotFound();
+                }
 
-            return View(review);
+                return View(review);
+            }
         }
 
         // POST: Reviews/Delete/5
@@ -155,23 +181,30 @@ namespace WebAppServer1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Review == null)
+            using (var db = new WebServerContext())
             {
-                return Problem("Entity set 'WebAppServer1Context.Review'  is null.");
-            }
-            var review = await _context.Review.FindAsync(id);
-            if (review != null)
-            {
-                _context.Review.Remove(review);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+                if (db.Reviews == null)
+                {
+                    return Problem("Entity set 'WebAppServer1Context.Review'  is null.");
+                }
+                var review = await db.Reviews.FindAsync(id);
+                if (review != null)
+                {
+                    db.Reviews.Remove(review);
+                }
 
-        private bool ReviewExists(int id)
-        {
-          return _context.Review.Any(e => e.Id == id);
-        }
+                await db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            }
+
+            private bool ReviewExists(int id)
+            {
+            using (var db = new WebServerContext())
+            {
+                return db.Reviews.Any(e => e.Id == id);
+            }
+            }
+        
     }
 }

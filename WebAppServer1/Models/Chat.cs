@@ -5,8 +5,9 @@ namespace ServerFreak.Models
 {
     public class Chat
     {
-        
+        [Key]
         public int Id { get; set; }
+        [Required]
         public string ContactId { get; set; }
 
         public List<Message> Messages { get; set; }

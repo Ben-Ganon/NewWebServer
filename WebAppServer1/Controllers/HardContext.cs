@@ -1,4 +1,5 @@
-﻿using ServerFreak.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ServerFreak.Models;
 using WebAppServer1.Models;
 
 namespace WebAppServer1.Controllers
@@ -8,10 +9,12 @@ namespace WebAppServer1.Controllers
     {
         public string username { get; set; }
     }
-    public static class HardContext
+    public class HardContext
     {
         public static  List<UserF> Users;
-        public static  void newDB()
+
+        public HardContext() { }
+        public  void newDB()
         {
             DateTime dt = DateTime.Now;
             Users = new List<UserF>();
@@ -34,7 +37,7 @@ namespace WebAppServer1.Controllers
             chats.Add(SagivBen);
             Chat OmriBen = new Chat(2, "Omri", new List<Message>());
             //chats.Add(OmriBen);
-            UserF Ben = new UserF("BenG", "1234", "Ben", "../images/p1.jpg", "s1", chats, contacts);
+            UserF Ben = new UserF("BenG", "123456Bg", "Ben", "../images/p1.jpg", "s1", chats, contacts);
             Users.Add(Ben);
 
 
@@ -54,7 +57,7 @@ namespace WebAppServer1.Controllers
             chats2.Add(OmriSag);
             Contact Omri3 = new Contact("Omri", "ommri", "gello", "s1", dt);
             contacts2.Add(Omri3);
-            UserF SagivU = new UserF("SagivA", "1111", "Sag", "../images/p2.png", "s1", chats2, contacts2);
+            UserF SagivU = new UserF("SagivA", "111145Sa", "Sag", "../images/p2.png", "s1", chats2, contacts2);
             Users.Add(SagivU);
 
             List<Contact> contacts3 = new List<Contact>();
@@ -64,52 +67,97 @@ namespace WebAppServer1.Controllers
             var chats3 = new List<Chat>();
             Chat OmriSagiv = new Chat(1, "SagivA", new List<Message>());
             chats3.Add(OmriSagiv);
-            UserF OmriU = new UserF("Omri", "1111", "omriB", "../images/p3.png", "s1", chats3, contacts3);
+            UserF OmriU = new UserF("Omri", "111145Ob", "omriB", "../images/p3.png", "s1", chats3, contacts3);
             Users.Add(OmriU);
 
-            UserF Uri = new UserF("Uri", "1111", "Uriel", "../images/p3.png", "s1", new List<Chat>(), new List<Contact>());
+            UserF Uri = new UserF("Uri", "111145Ug", "Uriel", "../images/p3.png", "s1", new List<Chat>(), new List<Contact>());
             Users.Add(Uri);
 
 
-            UserF Sahar = new UserF("Sahar", "1111", "One Rofe", "../images/p4.jpg", "s1", new List<Chat>(), new List<Contact>());
+            UserF Sahar = new UserF("Sahar", "111145Sr", "One Rofe", "../images/p4.jpg", "s1", new List<Chat>(), new List<Contact>());
             Users.Add(Sahar);
 
         }
         
         public static UserF Get(string username)
         {
-            if (username == "")
-                return null;
-            if(Users.Exists(x => x.Username == username))
+            using (var db = new WebServerContext())
             {
-                UserF u = Users.First(x => x.Username == username);
-                return u;
+                UserF user = db.Users.Include(x => x.Contacts).Include(x => x.Chats).ThenInclude(x => x.Messages).First(x => x.Username == username);
+                return user;
             }
-            return null;
+           
         }
         public static List<UserF> ToListAsync()
         {
-            return Users;
+            using (var db = new WebServerContext())
+            {
+                List<UserF> users = db.Users.ToList();
+                return users;
+            }
+        }
+        public static List<Contact> ContactList(string username)
+        {
+            using (var db = new WebServerContext())
+            {
+                UserF user = db.Users.Include(x => x.Contacts).First(x => x.Username == username);
+                return user.Contacts;
+            }
         }
         public static List<UserF> ToList()
         {
-            return Users;
+            using (var db = new WebServerContext())
+            {
+                List<UserF> users = db.Users.ToList();
+                return users;
+            }
+        }
+        public static void Put(string username, PutUser user)
+        {
+            using (var db = new WebServerContext())
+            {
+                var userSeek = db.Users.Find(username);
+                if (userSeek == null)
+                    return;
+                userSeek.NickName = user.Nickname;
+                userSeek.Server = user.Server;
+                db.SaveChanges();
+            }
         }
         public static void Add(UserF user)
         {
-            Users.Add(user);
+            using (var db = new WebServerContext())
+            {
+                db.Users.Add(user);
+                db.SaveChanges();
+            }
         }
         public static void AddContact(string username, Contact c)
         {
-            if(Users.Exists(x => x.Username == username))
-                Users.Find(x => x.Username == username).Contacts.Add(c);
+            using (var db = new WebServerContext())
+            {
+                UserF user = db.Users.Find(username);
+                if (user == null)
+                    return;
+                db.Users.Find(username).Contacts.Add(c);
+                db.Users.Find(username).Chats.Add(new Chat(0, c.Id, new List<Message>()));
+                db.SaveChanges();
+            }
         }
         public static Contact PutContact(string username, string id, string server, string nickname)
         {
-            int index = Users.Find(x => x.Username == username).Contacts.FindIndex(x => x.Id == id);
-            Contact c = Users.Find(x => x.Username == username).Contacts[index];
-            Users.Find(x => x.Username == username).Contacts[index] = new Contact(c.Id, nickname, c.Last, server, c.LastDate);
-            return c;
+            using (var db = new WebServerContext())
+            {
+                var user = db.Users.Find(username);
+                var cont = user.Contacts.Find(x => x.Id == id);
+                cont.server = server;
+                cont.Name = nickname;
+                db.SaveChanges();
+                return cont;
+            }
+            //int index = Users.Find(x => x.Username == username).Contacts.FindIndex(x => x.Id == id);
+            //Contact c = Users.Find(x => x.Username == username).Contacts[index];
+            //Users.Find(x => x.Username == username).Contacts[index] = new Contact(c.Id, nickname, c.Last, server, c.LastDate
         }
         public static bool SaveChangesAsync()
         {
@@ -128,12 +176,22 @@ namespace WebAppServer1.Controllers
         }
         public static void Delete(UserF user)
         {
-            Users.Remove(user);
+            using (var db = new WebServerContext())
+            {
+                db.Remove(user);
+            }
         }
         public static int DeleteContact(string username, string id)
         {
-            int r = Users.Find(x => x.Username == username).Contacts.RemoveAll(x => x.Id == id);
-            return r;
+            //int r = Users.Find(x => x.Username == username).Contacts.RemoveAll(x => x.Id == id);
+            //return r;
+            using (var db = new WebServerContext())
+            {
+                var User = db.Users.Find(username);
+                User.Contacts.RemoveAll(x => x.Id == id);
+                return 1;
+
+            }
         }
         public static void SaveChanges()
         {

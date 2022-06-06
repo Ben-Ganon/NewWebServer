@@ -1,18 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebAppServer1.Controllers;
-using WebAppServer1.Data;
+//using WebAppServer1.Data;
 using WebAppServer1.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<WebAppServer1Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAppServer1Context") ?? throw new InvalidOperationException("Connection string 'WebAppServer1Context' not found.")));
+//builder.Services.AddDbContext<WebAppServer1Context>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAppServer1Context") ?? throw new InvalidOperationException("Connection string 'WebAppServer1Context' not found.")));
 
 
 //builder.Services.AddDbContext<WebAppServer1Context>(options =>
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("WebAppServer1Context") ?? throw new InvalidOperationException("Connection string 'WebAppServer1Context' not found.")));
 
-HardContext.newDB();
+//HardContext.newDB();
 
 
 // Add services to the container.

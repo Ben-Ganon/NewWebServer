@@ -6,15 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ServerFreak.Models;
-using WebAppServer1.Data;
+//using WebAppServer1.Data;
 
 namespace WebAppServer1.Controllers
 {
     public class ChatsController : Controller
     {
-        private readonly WebAppServer1Context _context;
+        private readonly WebServerContext _context;
 
-        public ChatsController(WebAppServer1Context context)
+        public ChatsController(WebServerContext context)
         {
             _context = context;
         }
@@ -22,18 +22,18 @@ namespace WebAppServer1.Controllers
         // GET: Chats
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Chat.ToListAsync());
+              return View(await _context.Chats.ToListAsync());
         }
 
         // GET: Chats/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Chat == null)
+            if (id == null || _context.Chats == null)
             {
                 return NotFound();
             }
 
-            var chat = await _context.Chat
+            var chat = await _context.Chats
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chat == null)
             {
@@ -68,12 +68,12 @@ namespace WebAppServer1.Controllers
         // GET: Chats/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Chat == null)
+            if (id == null || _context.Chats == null)
             {
                 return NotFound();
             }
 
-            var chat = await _context.Chat.FindAsync(id);
+            var chat = await _context.Chats.FindAsync(id);
             if (chat == null)
             {
                 return NotFound();
@@ -119,12 +119,12 @@ namespace WebAppServer1.Controllers
         // GET: Chats/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Chat == null)
+            if (id == null || _context.Chats == null)
             {
                 return NotFound();
             }
 
-            var chat = await _context.Chat
+            var chat = await _context.Chats
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (chat == null)
             {
@@ -139,14 +139,14 @@ namespace WebAppServer1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Chat == null)
+            if (_context.Chats == null)
             {
                 return Problem("Entity set 'WebAppServer1Context.Chat'  is null.");
             }
-            var chat = await _context.Chat.FindAsync(id);
+            var chat = await _context.Chats.FindAsync(id);
             if (chat != null)
             {
-                _context.Chat.Remove(chat);
+                _context.Chats.Remove(chat);
             }
             
             await _context.SaveChangesAsync();
@@ -155,7 +155,7 @@ namespace WebAppServer1.Controllers
 
         private bool ChatExists(int id)
         {
-          return _context.Chat.Any(e => e.Id == id);
+          return _context.Chats.Any(e => e.Id == id);
         }
     }
 }

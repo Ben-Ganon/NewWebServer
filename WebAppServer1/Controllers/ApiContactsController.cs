@@ -57,11 +57,11 @@ namespace WebAppServer1.Controllers
         [HttpGet]
         public IEnumerable<ReturnCont> Get([FromQuery] UserPayload user)
         {
-            
-            UserF u = HardContext.Get(user.username);
-            if(u == null)
+
+            List<Contact> conts = HardContext.ContactList(user.username);
+            if(conts == null)
                 return null;
-            var c = u.Contacts.Select(x => new ReturnCont(x));
+            var c = conts.Select(x => new ReturnCont(x));
             return c;
         }
 
@@ -94,10 +94,10 @@ namespace WebAppServer1.Controllers
             }
             var contacts = user.Contacts.ToList();
             Contact newContact = new Contact(c.id, c.name, "Start New Conversation", "s1", DateTime.Now);
-            user.Contacts.Add(newContact);
-            Chat chat = new Chat(user.Chats.Count()+1,c.id, new List<Message>());
-            user.Chats.Add(chat);
-
+            //user.Contacts.Add(newContact);
+            //Chat chat = new Chat(user.Chats.Count()+1,c.id, new List<Message>());
+            //user.Chats.Add(chat);
+            HardContext.AddContact(user.Username, newContact);
             var contUser = HardContext.Get(c.id);
             if (contUser == null)
             {
@@ -111,9 +111,10 @@ namespace WebAppServer1.Controllers
                 return;
             }
             Contact newCont = new Contact(username, username, "Start New Conversation", "s1", DateTime.Now);
-            contUser.Contacts.Add(newCont);
-            Chat chat2 = new Chat(contUser.Chats.Count() + 1, username, new List<Message>());
-            contUser.Chats.Add(chat2);
+            //contUser.Contacts.Add(newCont);
+            //Chat chat2 = new Chat(contUser.Chats.Count() + 1, username, new List<Message>());
+            //contUser.Chats.Add(chat2);
+            HardContext.AddContact(contUser.Username, newCont);
 
             base.Response.StatusCode = (int)HttpStatusCode.Created;
 

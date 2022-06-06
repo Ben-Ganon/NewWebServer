@@ -10,7 +10,6 @@ namespace WebAppServer1.Controllers
 
     public class PutUser
     {
-        public string UserName { get; set; }  
         public string Nickname { get; set; }
         public string Server { get; set; }
     }
@@ -46,13 +45,9 @@ namespace WebAppServer1.Controllers
         
         // PUT api/users/5
         [HttpPut("{id}")]
-        public void Put([FromBody] PutUser u)
+        public void Put(string id, [FromBody] PutUser u)
         {
-            UserF seek = HardContext.Get(u.UserName);
-            if (seek == null)
-                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            seek.NickName = u.Nickname;
-            seek.Server = u.Server;
+            HardContext.Put(id, u);
             base.Response.StatusCode = (int)HttpStatusCode.NoContent;
 
         }

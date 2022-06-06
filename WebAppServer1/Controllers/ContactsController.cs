@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WebAppServer1.Data;
+//using WebAppServer1.Data;
 using WebAppServer1.Models;
 
 namespace WebAppServer1.Controllers
 {
     public class ContactsController : Controller
     {
-        private readonly WebAppServer1Context _context;
+        private readonly WebServerContext _context;
 
-        public ContactsController(WebAppServer1Context context)
+        public ContactsController(WebServerContext context)
         {
             _context = context;
         }
@@ -22,18 +22,18 @@ namespace WebAppServer1.Controllers
         // GET: Contacts
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Contact.ToListAsync());
+              return View(await _context.Contacts.ToListAsync());
         }
 
         // GET: Contacts/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.Contact == null)
+            if (id == null || _context.Contacts == null)
             {
                 return NotFound();
             }
 
-            var contact = await _context.Contact
+            var contact = await _context.Contacts
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (contact == null)
             {
@@ -68,12 +68,12 @@ namespace WebAppServer1.Controllers
         // GET: Contacts/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.Contact == null)
+            if (id == null || _context.Contacts == null)
             {
                 return NotFound();
             }
 
-            var contact = await _context.Contact.FindAsync(id);
+            var contact = await _context.Contacts.FindAsync(id);
             if (contact == null)
             {
                 return NotFound();
@@ -119,12 +119,12 @@ namespace WebAppServer1.Controllers
         // GET: Contacts/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.Contact == null)
+            if (id == null || _context.Contacts == null)
             {
                 return NotFound();
             }
 
-            var contact = await _context.Contact
+            var contact = await _context.Contacts
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (contact == null)
             {
@@ -139,14 +139,14 @@ namespace WebAppServer1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.Contact == null)
+            if (_context.Contacts == null)
             {
-                return Problem("Entity set 'WebAppServer1Context.Contact'  is null.");
+                return Problem("Entity set 'WebAppServer1Context.Contacts'  is null.");
             }
-            var contact = await _context.Contact.FindAsync(id);
+            var contact = await _context.Contacts.FindAsync(id);
             if (contact != null)
             {
-                _context.Contact.Remove(contact);
+                _context.Contacts.Remove(contact);
             }
             
             await _context.SaveChangesAsync();
@@ -155,7 +155,7 @@ namespace WebAppServer1.Controllers
 
         private bool ContactExists(string id)
         {
-          return _context.Contact.Any(e => e.Id == id);
+          return _context.Contacts.Any(e => e.Id == id);
         }
     }
 }
