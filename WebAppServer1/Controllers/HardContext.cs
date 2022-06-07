@@ -78,7 +78,38 @@ namespace WebAppServer1.Controllers
             Users.Add(Sahar);
 
         }
-        
+        public static bool UserExists(string username)
+        {
+            using (var db = new WebServerContext())
+            {
+                if(db.Users.Find(username) != null) return true;
+                return false;
+            }
+        }
+        public static bool MessageExists(string username, string contact, int messagId)
+        {
+            using (var db = new WebServerContext())
+            {
+                var user = db.Users.Find(username);
+                if (user == null) 
+                    return false;
+                if (user.Contacts.First(x => x.Id == contact) == null)
+                    return false;
+                if (user.Chats.First(x => x.ContactId == contact) == null)
+                    return false;
+                if (user.Chats.First(x => x.ContactId == contact).Messages.First(x => x.Id == messagId) == null)
+                    return false;
+                return true;
+            }
+        }
+        public static List<UserF> Get()
+        {
+            using (var db = new WebServerContext())
+            {
+                List<UserF> users = db.Users.Include(x => x.Contacts).Include(x => x.Chats).ThenInclude(x => x.Messages).ToList();
+                return users;
+            }
+        }
         public static UserF Get(string username)
         {
             using (var db = new WebServerContext())
@@ -124,6 +155,7 @@ namespace WebAppServer1.Controllers
                 db.SaveChanges();
             }
         }
+        
         public static void Add(UserF user)
         {
             using (var db = new WebServerContext())
@@ -132,7 +164,7 @@ namespace WebAppServer1.Controllers
                 db.SaveChanges();
             }
         }
-        public static void AddContact(string username, Contact c)
+        public static void Add(string username, Contact c)
         {
             using (var db = new WebServerContext())
             {
@@ -141,6 +173,15 @@ namespace WebAppServer1.Controllers
                     return;
                 db.Users.Find(username).Contacts.Add(c);
                 db.Users.Find(username).Chats.Add(new Chat(0, c.Id, new List<Message>()));
+                db.SaveChanges();
+            }
+        }
+        public static void Add(string username,string contact,  Message m)
+        {
+            using (var db = new WebServerContext())
+            {
+                var user = Get(username);
+                user.Chats.First(x => x.ContactId == contact).Messages.Add(m);
                 db.SaveChanges();
             }
         }
@@ -174,11 +215,20 @@ namespace WebAppServer1.Controllers
                     u.NickName = user.NickName;
             }
         }
-        public static void Delete(UserF user)
+        public static void Delete(string username)
         {
             using (var db = new WebServerContext())
             {
-                db.Remove(user);
+                db.Remove(username);
+                db.SaveChanges();
+            }
+        }
+        public static void Delete(string username, string contact, int messageId)
+        {
+            using (var db = new WebServerContext())
+            {
+                db.Users.Find(username).Chats.First(x => x.ContactId == contact).Messages.RemoveAll(x => x.Id == messageId);
+                db.SaveChanges();
             }
         }
         public static int DeleteContact(string username, string id)
@@ -187,8 +237,10 @@ namespace WebAppServer1.Controllers
             //return r;
             using (var db = new WebServerContext())
             {
-                var User = db.Users.Find(username);
+                var User = db.Users.Include(x => x.Contacts).Include(x => x.Chats).First(x => x.Username ==  username);
                 User.Contacts.RemoveAll(x => x.Id == id);
+                User.Chats.RemoveAll(x => x.ContactId == id);
+                db.SaveChanges();
                 return 1;
 
             }

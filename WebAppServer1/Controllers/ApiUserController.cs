@@ -21,7 +21,7 @@ namespace WebAppServer1.Controllers
         [HttpGet]
         public IEnumerable<UserF> Get()
         {
-            return HardContext.ToList();
+            return HardContext.Get();
         }
 
         // GET api/users/5
@@ -38,7 +38,7 @@ namespace WebAppServer1.Controllers
         [HttpPost]
         public void Post([FromBody] UserF newUser)
         {
-            HardContext.Users.Add(newUser);
+            HardContext.Add(newUser);
             base.Response.StatusCode = (int)HttpStatusCode.Created;
 
         }
@@ -56,10 +56,7 @@ namespace WebAppServer1.Controllers
         [HttpDelete("{id}")]
         public void Delete(string id)
         {
-            UserF seek = HardContext.Users.Find(x => x.Username == id);
-            if(seek == null)
-                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            HardContext.Users.Remove(seek);
+            HardContext.Delete(id);
             base.Response.StatusCode = (int)HttpStatusCode.NoContent;
 
         }

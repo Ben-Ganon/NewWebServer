@@ -80,28 +80,26 @@ namespace WebAppServer1.Controllers
 
         // PUT api/messages/{contact}/messages/181
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put([FromQuery] string username, string contact, int id, [FromBody] string value)
         {
+            if(!HardContext.MessageExists(username, contact, id))
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+
         }
 
         // DELETE api/messages/{contact}/messages
         [HttpDelete("{id}")]
         public void Delete([FromQuery] string username, string contact, int id)
         {
-            var user = HardContext.Get(username);
-            var chat = user.Chats.Find(x => x.ContactId == contact);
-            if (chat == null)
+            if(!HardContext.MessageExists(username, contact, id))
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return;
             }
-            var message = chat.Messages.ElementAt(id);
-            if(message == null)
-            {
-                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return;
-            }
-            chat.Messages.RemoveAll(x => x.Id == id);
+            HardContext.Delete(username, contact, id);
         }
     }
 }
