@@ -16,7 +16,7 @@ namespace WebAppServer1.Controllers
     {
         // GET: api/messages/{contact}/messages
         [HttpGet]
-        public IEnumerable<Message> Get(string username, string contact)
+        public IEnumerable<Message> Get(string contact, [FromQuery] string username)
         {
             var user = HardContext.Get(username);
             var retCont = user.Chats.Find(x => x.ContactId == contact);
@@ -56,8 +56,7 @@ namespace WebAppServer1.Controllers
                 return;
             }
             Message message = new Message(chat.Messages.Count(), m.content, "text", DateTime.Now.ToShortTimeString(), true);
-            chat.Messages.Add(message);
-
+            HardContext.Add(username, contact, message); 
             var userReceive = HardContext.Get(contact);
             if (userReceive == null)
             {
@@ -65,14 +64,16 @@ namespace WebAppServer1.Controllers
                 return;
             }
             chat = userReceive.Chats.Find(x => x.ContactId == username);
+            
             if (chat == null)
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return;
             }
+            message.Id++;
             Message m2 = new Message(message);
             m2.Sent = false;
-            chat.Messages.Add(m2);  
+            HardContext.Add(contact, username, m2);
 
             base.Response.StatusCode = (int)HttpStatusCode.Created;
 
@@ -80,28 +81,26 @@ namespace WebAppServer1.Controllers
 
         // PUT api/messages/{contact}/messages/181
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put([FromQuery] string username, string contact, int id, [FromBody] string value)
         {
+            if(!HardContext.MessageExists(username, contact, id))
+            {
+                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return;
+            }
+
         }
 
         // DELETE api/messages/{contact}/messages
         [HttpDelete("{id}")]
         public void Delete([FromQuery] string username, string contact, int id)
         {
-            var user = HardContext.Get(username);
-            var chat = user.Chats.Find(x => x.ContactId == contact);
-            if (chat == null)
+            if(!HardContext.MessageExists(username, contact, id))
             {
                 base.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return;
             }
-            var message = chat.Messages.ElementAt(id);
-            if(message == null)
-            {
-                base.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                return;
-            }
-            chat.Messages.RemoveAll(x => x.Id == id);
+            HardContext.Delete(username, contact, id);
         }
     }
 }
