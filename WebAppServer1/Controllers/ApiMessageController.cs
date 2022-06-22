@@ -73,6 +73,7 @@ namespace WebAppServer1.Controllers
             message.Id++;
             Message m2 = new Message(message);
             m2.Sent = false;
+            var x = 6;
             HardContext.Add(contact, username, m2);
 
             base.Response.StatusCode = (int)HttpStatusCode.Created;
